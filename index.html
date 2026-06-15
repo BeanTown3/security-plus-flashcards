@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CompTIA Security+ Study Deck</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --panel: #ffffff;
+      --ink: #18212f;
+      --muted: #657184;
+      --line: #d8dee8;
+      --blue: #2364aa;
+      --green: #1f7a5a;
+      --gold: #9a6a10;
+      --red: #b53636;
+      --shadow: 0 18px 45px rgba(32, 43, 61, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(35, 100, 170, 0.09), transparent 280px),
+        var(--bg);
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 7px;
+      padding: 0.65rem 0.85rem;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    button:hover { transform: translateY(-1px); border-color: #9fb2ca; }
+    button.primary { background: var(--blue); border-color: var(--blue); color: white; }
+    button.success { background: var(--green); border-color: var(--green); color: white; }
+    button.warning { background: #fff7e6; border-color: #e0b95f; color: #6d4b0d; }
+    button.danger { background: #fff0f0; border-color: #db9a9a; color: #8d2222; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 12px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.55;
+    }
+
+    .source {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.72);
+      white-space: nowrap;
+      font-size: 0.9rem;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 92px;
+      box-shadow: 0 10px 25px rgba(32, 43, 61, 0.06);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.85rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    aside, main {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    aside {
+      padding: 14px;
+      position: sticky;
+      top: 14px;
+    }
+
+    main {
+      padding: 18px;
+      min-width: 0;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    select, input[type="search"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      border-radius: 7px;
+      padding: 0.68rem 0.75rem;
+      min-height: 42px;
+    }
+
+    .toggle-row {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--ink);
+      font-size: 0.94rem;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .section-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .mini-topic {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .mini-topic strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .mini-topic span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .study-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .deck-title h2 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .deck-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .progress-wrap {
+      display: grid;
+      gap: 7px;
+      min-width: 210px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .progress {
+      height: 9px;
+      background: #e7ebf1;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .card-stage {
+      perspective: 1200px;
+      min-height: 372px;
+    }
+
+    .flashcard {
+      position: relative;
+      min-height: 372px;
+      transform-style: preserve-3d;
+      transition: transform 260ms ease;
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .face {
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      backface-visibility: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+      background: #fbfcfe;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: #edf3fa;
+      color: #214c78;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .tag.trap { background: #fff0f0; color: var(--red); }
+    .tag.obj { background: #eef8f3; color: var(--green); }
+    .tag.diff { background: #fff7e6; color: var(--gold); }
+
+    .prompt {
+      font-size: clamp(1.28rem, 2.6vw, 2rem);
+      line-height: 1.28;
+      margin: 0;
+      align-self: center;
+    }
+
+    .answer {
+      font-size: clamp(1.05rem, 2vw, 1.38rem);
+      line-height: 1.45;
+      align-self: center;
+    }
+
+    .trap-note {
+      border-left: 4px solid var(--red);
+      background: #fff5f5;
+      color: #772323;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-top: 14px;
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 16px 0 0;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .rate-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .topic-guide {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .topic-guide h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+    }
+
+    details {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    details ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .empty {
+      padding: 48px 18px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      header, .layout, .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .study-top, .controls, .rate-row {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-wrap {
+        min-width: 0;
+      }
+
+      .card-stage, .flashcard {
+        min-height: 430px;
+      }
+
+      .source {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div>
+        <h1>CompTIA Security+ Study Deck</h1>
+        <p class="subtitle">Flashcards and quick review notes generated from your Notion pages: Section 2 Fundamentals of Security and Section 3 Threat Actors.</p>
+      </div>
+      <div class="source">Source: Notion Security+ notes</div>
+    </header>
+
+    <section class="dashboard" aria-label="Study stats">
+      <div class="metric"><span>Total Cards</span><strong id="totalCards">0</strong></div>
+      <div class="metric"><span>Current Deck</span><strong id="deckCount">0</strong></div>
+      <div class="metric"><span>Trap Cards</span><strong id="trapCount">0</strong></div>
+      <div class="metric"><span>Reviewed</span><strong id="reviewedCount">0</strong></div>
+    </section>
+
+    <div class="layout">
+      <aside>
+        <div class="field">
+          <label for="deckSelect">Deck</label>
+          <select id="deckSelect">
+            <option value="all">All Security+ cards</option>
+            <option value="fundamentals">Section 2: Fundamentals</option>
+            <option value="threats">Section 3: Threat Actors</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="topicSelect">Topic</label>
+          <select id="topicSelect"></select>
+        </div>
+
+        <div class="field">
+          <label for="searchInput">Search cards</label>
+          <input id="searchInput" type="search" placeholder="Try zero trust, MFA, honeytoken">
+        </div>
+
+        <div class="toggle-row">
+          <label class="check"><input id="trapOnly" type="checkbox"> Trap cards only</label>
+          <label class="check"><input id="hideMastered" type="checkbox"> Hide mastered cards</label>
+        </div>
+
+        <div class="button-grid">
+          <button id="shuffleBtn" class="primary">Shuffle</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+
+        <div class="section-list" aria-label="Topic summary">
+          <div class="mini-topic"><strong>CIA, AAA, Zero Trust</strong><span>Core Section 2 exam foundations.</span></div>
+          <div class="mini-topic"><strong>Control categories and types</strong><span>Technical, managerial, operational, physical plus six types.</span></div>
+          <div class="mini-topic"><strong>Threat actors and vectors</strong><span>Who, how, where, motivations, and exam traps.</span></div>
+          <div class="mini-topic"><strong>Honey family</strong><span>Honeytoken, honeyfile, honeypot, honeynet by scale.</span></div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="study-top">
+          <div class="deck-title">
+            <h2 id="activeTitle">Study</h2>
+            <p id="activeSubtitle">Flip the card, rate it, and move on.</p>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Deck progress</span><span id="positionText">0 / 0</span></div>
+            <div class="progress"><span id="progressBar"></span></div>
+          </div>
+        </div>
+
+        <div id="cardContainer" class="card-stage"></div>
+
+        <div class="controls">
+          <button id="prevBtn">Previous</button>
+          <button id="flipBtn" class="primary">Flip Card</button>
+          <button id="nextBtn">Next</button>
+          <button id="randomBtn">Random</button>
+        </div>
+
+        <div class="rate-row">
+          <button id="againBtn" class="danger">Again</button>
+          <button id="goodBtn" class="warning">Good</button>
+          <button id="masteredBtn" class="success">Mastered</button>
+        </div>
+
+        <section class="topic-guide">
+          <h3>Quick Topic Review</h3>
+          <details open>
+            <summary>Section 2: Fundamentals of Security</summary>
+            <ul>
+              <li>CIA Triad: confidentiality prevents unauthorized disclosure, integrity prevents unauthorized change, availability keeps systems reachable.</li>
+              <li>Non-repudiation uses digital signatures: hash the message, encrypt the hash with the sender's private key, verify with the sender's public key.</li>
+              <li>AAA order matters: authenticate first, authorize second, account/log after access.</li>
+              <li>Zero Trust: never trust, always verify. Policy Engine decides in the control plane; PEP executes in the data plane.</li>
+              <li>Risk exists only when a threat and a matching vulnerability are both present.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 3: Threat Actors</summary>
+            <ul>
+              <li>Threat actor is the who, threat vector is the how, attack surface is the where.</li>
+              <li>Nation-state/APT usually signals high sophistication, long-term persistence, custom tooling, espionage, or strategic goals.</li>
+              <li>Organized crime is money-driven, even when tooling is advanced or the group acts as a proxy.</li>
+              <li>Shadow IT is usually convenience-driven, not automatically malicious, but still creates unmanaged risk.</li>
+              <li>Honey family by scale: honeytoken, honeyfile, honeypot, honeynet.</li>
+            </ul>
+          </details>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const cards = [
+      {deck:"fundamentals", topic:"CIA Triad", objective:"1.2", difficulty:"Medium", trap:false, q:"A company's file server goes offline during ransomware, preventing employees from accessing critical documents. Which CIA pillar was violated?", a:"Availability. Ransomware that blocks authorized access attacks availability. If data was stolen, that would be confidentiality. If data was altered, that would be integrity."},
+      {deck:"fundamentals", topic:"CIA Triad", objective:"1.2", difficulty:"Hard", trap:true, q:"An attacker intercepts a financial transaction and modifies the dollar amount before it reaches the bank. Which CIA pillar is primarily violated?", a:"Integrity. Unauthorized modification of data violates integrity, not confidentiality or availability.", trapNote:"Confidentiality is about unauthorized viewing. Availability is about access denial."},
+      {deck:"fundamentals", topic:"CIA Triad", objective:"1.2", difficulty:"Medium", trap:false, q:"A database is accessed by an unauthorized employee who reads confidential patient records. Which CIA pillar was violated?", a:"Confidentiality. Unauthorized access or disclosure of data is a confidentiality violation."},
+      {deck:"fundamentals", topic:"CIA Triad", objective:"1.2", difficulty:"Medium", trap:false, q:"A security team uses checksums to verify files downloaded from a vendor portal. Which CIA pillar does this primarily support?", a:"Integrity. Checksums verify that data has not been altered during transmission."},
+      {deck:"fundamentals", topic:"Non-repudiation", objective:"1.2", difficulty:"Hard", trap:true, q:"A digital signature is created by encrypting a hash digest with which key?", a:"The sender's private key. The recipient uses the sender's public key to verify authenticity and integrity.", trapNote:"Do not choose the public key or the receiver's key."},
+      {deck:"fundamentals", topic:"Non-repudiation", objective:"1.2", difficulty:"Medium", trap:false, q:"A user claims they never sent a digitally signed contract. Which security concept proves their action?", a:"Non-repudiation. A valid digital signature proves the sender cannot deny the action."},
+      {deck:"fundamentals", topic:"AAA", objective:"1.2", difficulty:"Hard", trap:true, q:"A user enters a password and answers a security question. Is this MFA?", a:"No. Both are something you know. MFA requires factors from at least two different categories.", trapNote:"Two passwords, two PINs, or a password plus security question are still one factor category."},
+      {deck:"fundamentals", topic:"AAA", objective:"1.2", difficulty:"Medium", trap:false, q:"A user successfully logs into HR but is blocked from viewing payroll files. Which AAA component denied access?", a:"Authorization. The user was authenticated, but not authorized for that resource."},
+      {deck:"fundamentals", topic:"AAA", objective:"1.2", difficulty:"Medium", trap:false, q:"A forensics team reviews logs to learn which admin deleted records at 3:14 AM. Which AAA component makes this possible?", a:"Accounting. Accounting logs user activity and creates the audit trail."},
+      {deck:"fundamentals", topic:"AAA", objective:"1.2", difficulty:"Hard", trap:false, q:"Which three technologies commonly support accounting in an AAA framework?", a:"Syslog servers, network analysis tools, and SIEM systems."},
+      {deck:"fundamentals", topic:"Risk", objective:"1.2", difficulty:"Hard", trap:true, q:"An organization has a vulnerable web server, but no known threat currently targets that vulnerability. What is the risk level?", a:"No actionable risk under this model. Risk exists when both a threat and a vulnerability are present.", trapNote:"A vulnerability alone is not enough. A threat alone is not enough."},
+      {deck:"fundamentals", topic:"Risk", objective:"1.2", difficulty:"Medium", trap:false, q:"A web server has an unpatched SQL injection flaw and threat actors are actively scanning for it. What exists?", a:"Risk. A threat and a matching vulnerability are both present."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Easy", trap:false, q:"A company deploys a next-generation firewall to block malicious traffic. What control category is this?", a:"Technical control. It uses hardware or software mechanisms to reduce risk."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Medium", trap:false, q:"A CISO creates a risk assessment policy and requires annual security audits. What control category is this?", a:"Managerial control, also called administrative. It involves governance, policy, and planning."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Medium", trap:false, q:"Security guards check employee badges at building entrances every morning. What control category is this?", a:"Operational control. It is a day-to-day, human-driven procedure."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Easy", trap:false, q:"A firewall blocks inbound Telnet traffic on port 23 before connections can occur. What control type is this?", a:"Preventive control. It stops an attack before it happens."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Medium", trap:false, q:"An IDS sends an alert when unusual outbound traffic appears. What control type is this?", a:"Detective control. It identifies activity during or after it occurs."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Hard", trap:true, q:"Security cameras in a parking lot catch a laptop theft. What control category and type are the cameras?", a:"Category: physical. Type: detective. One control can have both a category and a type.", trapNote:"The exam often tests category and type together."},
+      {deck:"fundamentals", topic:"Controls", objective:"1.1", difficulty:"Hard", trap:false, q:"A hospital cannot deploy MFA on legacy devices, so it increases monitoring and logging. What control type is this?", a:"Compensating control. It is an alternative measure used when the primary control is not feasible."},
+      {deck:"fundamentals", topic:"Gap Analysis", objective:"1.2", difficulty:"Medium", trap:false, q:"A security team compares current firewall settings against NIST 800-53 and creates a remediation roadmap. What process is this?", a:"Gap analysis, specifically technical gap analysis. The remediation roadmap may become a POA&M."},
+      {deck:"fundamentals", topic:"Zero Trust", objective:"1.2", difficulty:"Hard", trap:true, q:"In Zero Trust, which component makes the access decision and which component executes it?", a:"The Policy Engine makes the decision in the control plane. The PEP executes the decision in the data plane.", trapNote:"PEP belongs in the data plane, not the control plane."},
+      {deck:"fundamentals", topic:"Zero Trust", objective:"1.2", difficulty:"Hard", trap:false, q:"A Zero Trust design blocks a marketing employee from the finance database even inside the internal network. What concept is this?", a:"Threat scope reduction. Access is limited to only what the user needs, reducing breach impact."},
+      {deck:"threats", topic:"Threat Actor Basics", objective:"2.1", difficulty:"Easy", trap:false, q:"What is the difference between a threat actor, threat vector, and attack surface?", a:"Threat actor is the who. Threat vector is the how. Attack surface is the where."},
+      {deck:"threats", topic:"Threat Actor Basics", objective:"2.1", difficulty:"Easy", trap:false, q:"What are the three core threat actor attributes from the notes?", a:"Internal vs external, resources/funding, and level of sophistication/capability."},
+      {deck:"threats", topic:"Nation-state/APT", objective:"2.1", difficulty:"Hard", trap:true, q:"A well-funded group maintains undetected access to a defense contractor for 18 months and slowly exfiltrates classified data. Which actor best fits?", a:"Nation-state actor operating as an APT. Long-term persistence, stealth, classified targets, and high resources are the signature.", trapNote:"Organized crime can be advanced too, but classified intelligence points to strategic or nation-state goals."},
+      {deck:"threats", topic:"Actor Types", objective:"2.1", difficulty:"Easy", trap:false, q:"A teenager downloads a DDoS tool, enters a school district IP address, and clicks launch. Which actor type is this?", a:"Unskilled attacker, also called a script kiddie. They use tools created by others."},
+      {deck:"threats", topic:"Actor Types", objective:"2.1", difficulty:"Medium", trap:true, q:"A group defaces a government website and releases emails to expose alleged corruption. What is the motivation?", a:"Philosophical or political beliefs. This is hacktivism.", trapNote:"Do not pick financial gain when the scenario is protest or ideology."},
+      {deck:"threats", topic:"Actor Types", objective:"2.1", difficulty:"Medium", trap:false, q:"A criminal syndicate deploys custom ransomware against hospitals and demands cryptocurrency. What actor and motivation fit?", a:"Organized crime motivated by financial gain. Follow the money trail."},
+      {deck:"threats", topic:"Insider/Shadow IT", objective:"2.1", difficulty:"Medium", trap:true, q:"A developer copies large amounts of source code to a personal cloud account before resigning. What threat category is this?", a:"Insider threat. An internal user with legitimate access is misusing that access.", trapNote:"Data exfiltration describes the action, not the actor category."},
+      {deck:"threats", topic:"Insider/Shadow IT", objective:"2.1", difficulty:"Easy", trap:false, q:"Marketing signs up for an unapproved SaaS analytics tool and uploads customer data without IT approval. What is this called?", a:"Shadow IT. It is usually convenience-driven, not automatically malicious, but it still creates risk."},
+      {deck:"threats", topic:"Nation-state/APT", objective:"2.1", difficulty:"Hard", trap:false, q:"An attacker plants false digital fingerprints so malware appears to come from another country. What technique is this?", a:"False flag attack. It is designed to mislead attribution."},
+      {deck:"threats", topic:"Nation-state/APT", objective:"2.1", difficulty:"Medium", trap:false, q:"An attack uses a previously unknown vulnerability with no available patch. What is this called and what does it suggest?", a:"Zero-day exploit. It suggests a high-sophistication actor, often nation-state or top-tier organized crime."},
+      {deck:"threats", topic:"Threat Vectors", objective:"2.2", difficulty:"Easy", trap:false, q:"A user receives a text message from a fake bank asking them to click a link. What threat vector is this?", a:"Smishing. It is phishing delivered through SMS."},
+      {deck:"threats", topic:"Threat Vectors", objective:"2.2", difficulty:"Easy", trap:false, q:"An attacker leaves malware-loaded USB drives in the company parking lot. What technique is this?", a:"Baiting. It uses removable media as a physical lure."},
+      {deck:"threats", topic:"Threat Vectors", objective:"2.2", difficulty:"Hard", trap:true, q:"A breach begins through a managed service provider used by the company help desk. What threat vector is this?", a:"Supply chain. The attacker entered through a vendor or MSP relationship.", trapNote:"Do not focus only on the final target. Follow the entry path."},
+      {deck:"threats", topic:"Bluetooth/Wired", objective:"2.2", difficulty:"Hard", trap:false, q:"Bluetooth malware installs without any user interaction. What attack family is this?", a:"BlueBorne. The key phrase is no user interaction."},
+      {deck:"threats", topic:"Bluetooth/Wired", objective:"2.2", difficulty:"Hard", trap:false, q:"An attacker sends crafted L2CAP packets to crash a Bluetooth device. What attack is this?", a:"BlueSmack. It is a Bluetooth DoS attack."},
+      {deck:"threats", topic:"Bluetooth/Wired", objective:"2.2", difficulty:"Hard", trap:false, q:"A wired-network attacker exploits a switch misconfiguration to send traffic from one VLAN to another. What attack is this?", a:"VLAN hopping."},
+      {deck:"threats", topic:"Deception", objective:"1.2", difficulty:"Medium", trap:true, q:"Fake credentials are placed in a database and trigger an alert if used. What is this called?", a:"Honeytoken. It is fake data with no real value, monitored for unauthorized use.", trapNote:"Honeyfile is a file. Honeytoken is a data element such as credentials."},
+      {deck:"threats", topic:"Deception", objective:"1.2", difficulty:"Easy", trap:false, q:"A security team deploys fake servers, routers, and switches to simulate an entire network. What is this?", a:"Honeynet. A honeypot is one decoy system; a honeynet is a full decoy network."},
+      {deck:"threats", topic:"Deception", objective:"1.2", difficulty:"Medium", trap:false, q:"List the honey deception family from smallest to largest scale.", a:"Honeytoken, honeyfile, honeypot, honeynet."},
+      {deck:"threats", topic:"Social Engineering", objective:"2.2", difficulty:"Medium", trap:false, q:"An attacker compromises an executive email and sends a fraudulent wire transfer request. What attack type is this?", a:"Business Email Compromise, or BEC. It often uses impersonation and pretexting."},
+      {deck:"threats", topic:"Social Engineering", objective:"2.2", difficulty:"Medium", trap:false, q:"An attacker compromises a site that target employees frequently visit and uses it to deliver malware. What is this called?", a:"Watering hole attack. The attacker poisons a trusted third-party site."},
+      {deck:"threats", topic:"Social Engineering", objective:"2.2", difficulty:"Medium", trap:true, q:"Fake domains like g00gle.com or amzon.com are registered to catch mistyped URLs. What is this vector?", a:"Typosquatting. It relies on users mistyping trusted domains.", trapNote:"Brand impersonation is broader; typosquatting specifically abuses URL mistakes."},
+      {deck:"threats", topic:"Motivation", objective:"2.1", difficulty:"Hard", trap:true, q:"An attacker steals private photos and threatens release unless the victim pays. What is the motivation, and is it ransomware?", a:"The motivation is blackmail. It is not ransomware unless data is encrypted to deny access.", trapNote:"Stolen data plus payment demand is blackmail. Encryption plus payment demand is ransomware."},
+      {deck:"threats", topic:"Motivation", objective:"2.1", difficulty:"Hard", trap:true, q:"A foreign intelligence service hires a criminal group to attack a rival nation's bank. What actor category is the criminal group?", a:"Organized crime. Even as a proxy, their motivation is financial gain.", trapNote:"Follow the motivation, not just the sponsor."}
+    ];
+
+    const deckNames = {
+      all: "All Security+ cards",
+      fundamentals: "Section 2: Fundamentals",
+      threats: "Section 3: Threat Actors"
+    };
+
+    let filtered = [];
+    let index = 0;
+    let flipped = false;
+    let review = JSON.parse(localStorage.getItem("secplusReview") || "{}");
+
+    const el = {
+      totalCards: document.getElementById("totalCards"),
+      deckCount: document.getElementById("deckCount"),
+      trapCount: document.getElementById("trapCount"),
+      reviewedCount: document.getElementById("reviewedCount"),
+      deckSelect: document.getElementById("deckSelect"),
+      topicSelect: document.getElementById("topicSelect"),
+      searchInput: document.getElementById("searchInput"),
+      trapOnly: document.getElementById("trapOnly"),
+      hideMastered: document.getElementById("hideMastered"),
+      shuffleBtn: document.getElementById("shuffleBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      activeTitle: document.getElementById("activeTitle"),
+      activeSubtitle: document.getElementById("activeSubtitle"),
+      positionText: document.getElementById("positionText"),
+      progressBar: document.getElementById("progressBar"),
+      cardContainer: document.getElementById("cardContainer"),
+      prevBtn: document.getElementById("prevBtn"),
+      flipBtn: document.getElementById("flipBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      randomBtn: document.getElementById("randomBtn"),
+      againBtn: document.getElementById("againBtn"),
+      goodBtn: document.getElementById("goodBtn"),
+      masteredBtn: document.getElementById("masteredBtn")
+    };
+
+    function cardId(card) {
+      return `${card.deck}:${card.topic}:${card.q.slice(0, 40)}`;
+    }
+
+    function topicsForDeck(deck) {
+      const base = deck === "all" ? cards : cards.filter(card => card.deck === deck);
+      return ["all", ...Array.from(new Set(base.map(card => card.topic))).sort()];
+    }
+
+    function syncTopics() {
+      const current = el.topicSelect.value || "all";
+      el.topicSelect.innerHTML = topicsForDeck(el.deckSelect.value)
+        .map(topic => `<option value="${topic}">${topic === "all" ? "All topics" : topic}</option>`)
+        .join("");
+      el.topicSelect.value = topicsForDeck(el.deckSelect.value).includes(current) ? current : "all";
+    }
+
+    function applyFilters() {
+      const deck = el.deckSelect.value;
+      const topic = el.topicSelect.value;
+      const term = el.searchInput.value.trim().toLowerCase();
+      filtered = cards.filter(card => {
+        const matchesDeck = deck === "all" || card.deck === deck;
+        const matchesTopic = topic === "all" || card.topic === topic;
+        const matchesTerm = !term || `${card.q} ${card.a} ${card.topic}`.toLowerCase().includes(term);
+        const matchesTrap = !el.trapOnly.checked || card.trap;
+        const matchesMastered = !el.hideMastered.checked || review[cardId(card)] !== "mastered";
+        return matchesDeck && matchesTopic && matchesTerm && matchesTrap && matchesMastered;
+      });
+      index = Math.min(index, Math.max(filtered.length - 1, 0));
+      flipped = false;
+      render();
+    }
+
+    function render() {
+      el.totalCards.textContent = cards.length;
+      el.deckCount.textContent = filtered.length;
+      el.trapCount.textContent = filtered.filter(card => card.trap).length;
+      el.reviewedCount.textContent = Object.keys(review).length;
+
+      el.activeTitle.textContent = deckNames[el.deckSelect.value];
+      el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : "No cards match the current filters.";
+      el.positionText.textContent = filtered.length ? `${index + 1} / ${filtered.length}` : "0 / 0";
+      el.progressBar.style.width = filtered.length ? `${((index + 1) / filtered.length) * 100}%` : "0%";
+
+      const disabled = filtered.length === 0;
+      [el.prevBtn, el.flipBtn, el.nextBtn, el.randomBtn, el.againBtn, el.goodBtn, el.masteredBtn].forEach(button => button.disabled = disabled);
+
+      if (!filtered.length) {
+        el.cardContainer.innerHTML = `<div class="empty">No cards match those filters. Widen the deck, topic, or search.</div>`;
+        return;
+      }
+
+      const card = filtered[index];
+      const rating = review[cardId(card)];
+      el.cardContainer.innerHTML = `
+        <article class="flashcard ${flipped ? "flipped" : ""}" tabindex="0" aria-label="Flashcard">
+          <section class="face front">
+            <div class="tags">
+              <span class="tag">${card.topic}</span>
+              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag diff">${card.difficulty}</span>
+              ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
+              ${rating ? `<span class="tag">${rating}</span>` : ""}
+            </div>
+            <p class="prompt">${card.q}</p>
+            <p class="hint">Click Flip Card or press Space to reveal the answer.</p>
+          </section>
+          <section class="face back">
+            <div class="tags">
+              <span class="tag">${card.topic}</span>
+              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag diff">${card.difficulty}</span>
+              ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
+            </div>
+            <div class="answer">${card.a}${card.trapNote ? `<div class="trap-note">${card.trapNote}</div>` : ""}</div>
+            <p class="hint">Rate the card, then continue.</p>
+          </section>
+        </article>
+      `;
+      document.querySelector(".flashcard").addEventListener("click", flip);
+    }
+
+    function flip() {
+      if (!filtered.length) return;
+      flipped = !flipped;
+      render();
+    }
+
+    function move(delta) {
+      if (!filtered.length) return;
+      index = (index + delta + filtered.length) % filtered.length;
+      flipped = false;
+      render();
+    }
+
+    function randomCard() {
+      if (filtered.length < 2) return;
+      let next = index;
+      while (next === index) next = Math.floor(Math.random() * filtered.length);
+      index = next;
+      flipped = false;
+      render();
+    }
+
+    function shuffleCards() {
+      for (let i = filtered.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+      }
+      index = 0;
+      flipped = false;
+      render();
+    }
+
+    function rate(value) {
+      if (!filtered.length) return;
+      review[cardId(filtered[index])] = value;
+      localStorage.setItem("secplusReview", JSON.stringify(review));
+      move(1);
+    }
+
+    el.deckSelect.addEventListener("change", () => { syncTopics(); applyFilters(); });
+    el.topicSelect.addEventListener("change", applyFilters);
+    el.searchInput.addEventListener("input", applyFilters);
+    el.trapOnly.addEventListener("change", applyFilters);
+    el.hideMastered.addEventListener("change", applyFilters);
+    el.shuffleBtn.addEventListener("click", shuffleCards);
+    el.resetBtn.addEventListener("click", () => {
+      review = {};
+      localStorage.removeItem("secplusReview");
+      index = 0;
+      flipped = false;
+      applyFilters();
+    });
+    el.prevBtn.addEventListener("click", () => move(-1));
+    el.nextBtn.addEventListener("click", () => move(1));
+    el.flipBtn.addEventListener("click", flip);
+    el.randomBtn.addEventListener("click", randomCard);
+    el.againBtn.addEventListener("click", () => rate("again"));
+    el.goodBtn.addEventListener("click", () => rate("good"));
+    el.masteredBtn.addEventListener("click", () => rate("mastered"));
+
+    document.addEventListener("keydown", event => {
+      if (event.target.matches("input, select")) return;
+      if (event.code === "Space") { event.preventDefault(); flip(); }
+      if (event.key === "ArrowRight") move(1);
+      if (event.key === "ArrowLeft") move(-1);
+    });
+
+    syncTopics();
+    applyFilters();
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Local workspace files
+work/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Dependency folders, if the project grows later
+node_modules/
