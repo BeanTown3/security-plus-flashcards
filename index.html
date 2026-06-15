@@ -6,16 +6,18 @@
   <title>CompTIA Security+ Study Deck</title>
   <style>
     :root {
-      --bg: #f5f7fa;
-      --panel: #ffffff;
-      --ink: #18212f;
-      --muted: #657184;
-      --line: #d8dee8;
-      --blue: #2364aa;
-      --green: #1f7a5a;
-      --gold: #9a6a10;
-      --red: #b53636;
-      --shadow: 0 18px 45px rgba(32, 43, 61, 0.14);
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-2: #283548;
+      --ink: #f1f5f9;
+      --muted: #94a3b8;
+      --line: #334155;
+      --blue: #3b82f6;
+      --green: #10b981;
+      --gold: #f59e0b;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+      --shadow: 0 22px 58px rgba(0, 0, 0, 0.28);
     }
 
     * { box-sizing: border-box; }
@@ -25,7 +27,8 @@
       font-family: Inter, "Segoe UI", Arial, sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(35, 100, 170, 0.09), transparent 280px),
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 300px),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.13), transparent 340px),
         var(--bg);
     }
 
@@ -35,19 +38,19 @@
 
     button {
       border: 1px solid var(--line);
-      background: var(--panel);
+      background: var(--panel-2);
       color: var(--ink);
-      border-radius: 7px;
+      border-radius: 8px;
       padding: 0.65rem 0.85rem;
       cursor: pointer;
       transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
     }
 
-    button:hover { transform: translateY(-1px); border-color: #9fb2ca; }
+    button:hover { transform: translateY(-1px); border-color: #64748b; background: #314057; }
     button.primary { background: var(--blue); border-color: var(--blue); color: white; }
     button.success { background: var(--green); border-color: var(--green); color: white; }
-    button.warning { background: #fff7e6; border-color: #e0b95f; color: #6d4b0d; }
-    button.danger { background: #fff0f0; border-color: #db9a9a; color: #8d2222; }
+    button.warning { background: var(--gold); border-color: var(--gold); color: #111827; }
+    button.danger { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.42); color: #fca5a5; }
     button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .shell {
@@ -87,7 +90,7 @@
       border: 1px solid var(--line);
       border-radius: 7px;
       color: var(--muted);
-      background: rgba(255,255,255,0.72);
+      background: rgba(30, 41, 59, 0.72);
       white-space: nowrap;
       font-size: 0.9rem;
     }
@@ -102,11 +105,25 @@
     .metric {
       background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 14px;
       min-height: 92px;
-      box-shadow: 0 10px 25px rgba(32, 43, 61, 0.06);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.13);
+      position: relative;
+      overflow: hidden;
     }
+
+    .metric::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: var(--blue);
+    }
+
+    .metric:nth-child(2)::before { background: var(--green); }
+    .metric:nth-child(3)::before { background: var(--red); }
+    .metric:nth-child(4)::before { background: var(--gold); }
 
     .metric span {
       display: block;
@@ -130,9 +147,9 @@
     }
 
     aside, main {
-      background: rgba(255,255,255,0.82);
+      background: rgba(30, 41, 59, 0.88);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: var(--shadow);
     }
 
@@ -162,11 +179,16 @@
     select, input[type="search"] {
       width: 100%;
       border: 1px solid var(--line);
-      background: white;
+      background: var(--bg);
       color: var(--ink);
-      border-radius: 7px;
+      border-radius: 8px;
       padding: 0.68rem 0.75rem;
       min-height: 42px;
+    }
+
+    select:focus, input[type="search"]:focus {
+      outline: 2px solid var(--blue);
+      outline-offset: -1px;
     }
 
     .toggle-row {
@@ -198,9 +220,19 @@
 
     .mini-topic {
       border: 1px solid var(--line);
-      background: white;
-      border-radius: 8px;
+      background: var(--panel-2);
+      border-radius: 10px;
       padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mini-topic::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 3px;
+      background: var(--purple);
     }
 
     .mini-topic strong {
@@ -246,7 +278,7 @@
 
     .progress {
       height: 9px;
-      background: #e7ebf1;
+      background: var(--line);
       border-radius: 999px;
       overflow: hidden;
     }
@@ -255,7 +287,7 @@
       display: block;
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, var(--green), var(--blue));
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
     }
 
     .card-stage {
@@ -278,8 +310,8 @@
       position: absolute;
       inset: 0;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: white;
+      border-radius: 12px;
+      background: var(--panel);
       backface-visibility: hidden;
       display: grid;
       grid-template-rows: auto 1fr auto;
@@ -289,7 +321,7 @@
 
     .back {
       transform: rotateY(180deg);
-      background: #fbfcfe;
+      background: var(--panel-2);
     }
 
     .tags {
@@ -302,15 +334,15 @@
     .tag {
       border-radius: 999px;
       padding: 5px 9px;
-      background: #edf3fa;
-      color: #214c78;
+      background: rgba(59, 130, 246, 0.16);
+      color: #93c5fd;
       font-size: 0.8rem;
       font-weight: 700;
     }
 
-    .tag.trap { background: #fff0f0; color: var(--red); }
-    .tag.obj { background: #eef8f3; color: var(--green); }
-    .tag.diff { background: #fff7e6; color: var(--gold); }
+    .tag.trap { background: rgba(239, 68, 68, 0.18); color: #fca5a5; }
+    .tag.obj { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; }
+    .tag.diff { background: rgba(245, 158, 11, 0.18); color: #fcd34d; }
 
     .prompt {
       font-size: clamp(1.28rem, 2.6vw, 2rem);
@@ -327,8 +359,8 @@
 
     .trap-note {
       border-left: 4px solid var(--red);
-      background: #fff5f5;
-      color: #772323;
+      background: rgba(239, 68, 68, 0.13);
+      color: #fecaca;
       padding: 10px 12px;
       border-radius: 6px;
       margin-top: 14px;
@@ -367,9 +399,9 @@
     }
 
     details {
-      background: white;
+      background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 12px 14px;
     }
 
