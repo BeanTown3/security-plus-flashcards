@@ -18,6 +18,7 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - Shuffle and random-card practice
 - Again / Good / Mastered ratings
 - Dedicated Review Again mode for missed cards
+- Multiple-choice quiz mode with score tracking
 - Browser local storage for review progress
 - Offline-friendly single-page HTML app
 
@@ -63,7 +64,6 @@ Use the deck dropdown to choose a section, search for a topic, flip cards to rev
 
 - Add more Security+ chapters from Notion
 - Move flashcard data into a separate JSON file
-- Add a quiz mode with scoring
 - Add screenshots to the README
 - Publish with GitHub Pages
 - Add import/export for progress

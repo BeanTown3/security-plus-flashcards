@@ -224,6 +224,18 @@
       color: #fff;
     }
 
+    .quiz-mode-btn {
+      width: 100%;
+      margin-top: 8px;
+      font-weight: 800;
+    }
+
+    .quiz-mode-btn.active {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+    }
+
     .section-list {
       display: grid;
       gap: 10px;
@@ -437,6 +449,38 @@
       margin-top: 10px;
     }
 
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+      width: min(980px, 100%);
+      align-self: center;
+    }
+
+    .quiz-option {
+      text-align: left;
+      line-height: 1.35;
+      padding: 14px 16px;
+      min-height: 58px;
+    }
+
+    .quiz-option.correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--green);
+      color: #bbf7d0;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--red);
+      color: #fecaca;
+    }
+
+    .quiz-score {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
     .topic-guide {
       margin-top: 18px;
       display: grid;
@@ -549,6 +593,7 @@
         </div>
 
         <button id="reviewAgainBtn" class="danger review-again-btn">Review Again</button>
+        <button id="quizModeBtn" class="quiz-mode-btn">Quiz Mode</button>
 
         <div class="section-list" aria-label="Topic summary">
           <button class="mini-topic" type="button" data-guide="foundations" data-deck="fundamentals" data-topics="CIA Triad,AAA,Zero Trust,Non-repudiation,Risk,Gap Analysis"><strong>CIA, AAA, Zero Trust</strong><span>Core Section 2 exam foundations.</span></button>
@@ -675,6 +720,11 @@
     let activeGuideTopics = null;
     let activeGuideId = null;
     let reviewAgainMode = false;
+    let quizMode = false;
+    let quizAnswered = false;
+    let quizCorrect = 0;
+    let quizTotal = 0;
+    let quizOptions = [];
 
     const el = {
       totalCards: document.getElementById("totalCards"),
@@ -689,6 +739,7 @@
       shuffleBtn: document.getElementById("shuffleBtn"),
       resetBtn: document.getElementById("resetBtn"),
       reviewAgainBtn: document.getElementById("reviewAgainBtn"),
+      quizModeBtn: document.getElementById("quizModeBtn"),
       guideButtons: document.querySelectorAll(".mini-topic"),
       activeTitle: document.getElementById("activeTitle"),
       activeSubtitle: document.getElementById("activeSubtitle"),
@@ -738,6 +789,8 @@
       });
       index = Math.min(index, Math.max(filtered.length - 1, 0));
       flipped = false;
+      quizAnswered = false;
+      quizOptions = [];
       updateGuideButtons();
       render();
     }
@@ -753,6 +806,15 @@
       el.reviewAgainBtn.classList.remove("active");
     }
 
+    function clearQuizMode() {
+      quizMode = false;
+      quizAnswered = false;
+      quizCorrect = 0;
+      quizTotal = 0;
+      quizOptions = [];
+      el.quizModeBtn.classList.remove("active");
+    }
+
     function updateGuideButtons() {
       el.guideButtons.forEach(button => {
         button.classList.toggle("active", button.dataset.guide === activeGuideId);
@@ -761,6 +823,7 @@
 
     function applyGuideFilter(button) {
       clearReviewAgainMode();
+      clearQuizMode();
       activeGuideId = button.dataset.guide;
       activeGuideTopics = button.dataset.topics.split(",").map(topic => topic.trim());
       el.deckSelect.value = button.dataset.deck || "all";
@@ -772,6 +835,7 @@
 
     function applyReviewAgainMode() {
       clearGuideFilter();
+      clearQuizMode();
       reviewAgainMode = true;
       el.reviewAgainBtn.classList.add("active");
       el.deckSelect.value = "all";
@@ -780,6 +844,19 @@
       el.searchInput.value = "";
       el.trapOnly.checked = false;
       el.hideMastered.checked = false;
+      index = 0;
+      applyFilters();
+    }
+
+    function applyQuizMode() {
+      clearGuideFilter();
+      clearReviewAgainMode();
+      quizMode = true;
+      quizAnswered = false;
+      quizCorrect = 0;
+      quizTotal = 0;
+      quizOptions = [];
+      el.quizModeBtn.classList.add("active");
       index = 0;
       applyFilters();
     }
@@ -804,19 +881,74 @@
       `;
     }
 
+    function plainAnswerHead(text) {
+      const clean = String(text).trim();
+      const split = clean.match(/^(.{2,90}?)(?:\.\s+|\s+[—-]\s+)(.+)$/);
+      return split ? split[1] : clean;
+    }
+
+    function shuffled(list) {
+      const copy = [...list];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildQuizOptions(card) {
+      const correct = plainAnswerHead(card.a);
+      const wrong = shuffled(cards
+        .filter(item => cardId(item) !== cardId(card))
+        .map(item => plainAnswerHead(item.a))
+        .filter((answer, position, list) => answer && answer !== correct && list.indexOf(answer) === position))
+        .slice(0, 3);
+      return shuffled([correct, ...wrong]).map(answer => ({ answer, correct: answer === correct }));
+    }
+
+    function renderQuizCard(card, rating) {
+      if (!quizOptions.length) quizOptions = buildQuizOptions(card);
+      const status = quizAnswered ? "Review the highlighted answer, then go Next." : "Choose the best answer.";
+      return `
+        <article class="flashcard" tabindex="0" aria-label="Quiz question">
+          <section class="face front">
+            <div class="tags">
+              <span class="tag">${card.topic}</span>
+              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag diff">${card.difficulty}</span>
+              ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
+              ${rating ? `<span class="tag">${rating}</span>` : ""}
+              <span class="tag">Quiz ${quizCorrect}/${quizTotal}</span>
+            </div>
+            <p class="prompt">${escHtml(card.q)}</p>
+            <div class="quiz-options">
+              ${quizOptions.map((option, optionIndex) => `
+                <button class="quiz-option ${quizAnswered && option.correct ? "correct" : ""}" type="button" data-option="${optionIndex}" ${quizAnswered ? "disabled" : ""}>${escHtml(option.answer)}</button>
+              `).join("")}
+            </div>
+            <p class="hint">${status}</p>
+          </section>
+        </article>
+      `;
+    }
+
     function render() {
       el.totalCards.textContent = cards.length;
       el.deckCount.textContent = filtered.length;
       el.trapCount.textContent = filtered.filter(card => card.trap).length;
       el.reviewedCount.textContent = Object.values(review).filter(value => value === "again").length;
 
-      el.activeTitle.textContent = reviewAgainMode ? "Review Again cards" : deckNames[el.deckSelect.value];
+      el.activeTitle.textContent = quizMode ? "Quiz Mode" : (reviewAgainMode ? "Review Again cards" : deckNames[el.deckSelect.value]);
       el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
       el.positionText.textContent = filtered.length ? `${index + 1} / ${filtered.length}` : "0 / 0";
       el.progressBar.style.width = filtered.length ? `${((index + 1) / filtered.length) * 100}%` : "0%";
 
       const disabled = filtered.length === 0;
       [el.prevBtn, el.flipBtn, el.nextBtn, el.randomBtn, el.againBtn, el.goodBtn, el.masteredBtn].forEach(button => button.disabled = disabled);
+      el.flipBtn.disabled = disabled || quizMode;
+      el.againBtn.disabled = disabled || quizMode;
+      el.goodBtn.disabled = disabled || quizMode;
+      el.masteredBtn.disabled = disabled || quizMode;
 
       if (!filtered.length) {
         el.cardContainer.innerHTML = `<div class="empty">${reviewAgainMode ? "No Again cards right now. Mark cards Again when you want them to show up here." : "No cards match those filters. Widen the deck, topic, or search."}</div>`;
@@ -825,6 +957,13 @@
 
       const card = filtered[index];
       const rating = review[cardId(card)];
+      if (quizMode) {
+        el.cardContainer.innerHTML = renderQuizCard(card, rating);
+        document.querySelectorAll(".quiz-option").forEach(button => {
+          button.addEventListener("click", () => answerQuiz(Number(button.dataset.option)));
+        });
+        return;
+      }
       el.cardContainer.innerHTML = `
         <article class="flashcard ${flipped ? "flipped" : ""}" tabindex="0" aria-label="Flashcard">
           <section class="face front">
@@ -863,6 +1002,8 @@
       if (!filtered.length) return;
       index = (index + delta + filtered.length) % filtered.length;
       flipped = false;
+      quizAnswered = false;
+      quizOptions = [];
       render();
     }
 
@@ -872,6 +1013,8 @@
       while (next === index) next = Math.floor(Math.random() * filtered.length);
       index = next;
       flipped = false;
+      quizAnswered = false;
+      quizOptions = [];
       render();
     }
 
@@ -882,6 +1025,24 @@
       }
       index = 0;
       flipped = false;
+      quizAnswered = false;
+      quizOptions = [];
+      render();
+    }
+
+    function answerQuiz(optionIndex) {
+      if (!quizMode || quizAnswered || !filtered.length) return;
+      const selected = quizOptions[optionIndex];
+      const card = filtered[index];
+      quizAnswered = true;
+      quizTotal += 1;
+      if (selected?.correct) {
+        quizCorrect += 1;
+        review[cardId(card)] = "good";
+      } else {
+        review[cardId(card)] = "again";
+      }
+      localStorage.setItem("secplusReview", JSON.stringify(review));
       render();
     }
 
@@ -896,13 +1057,14 @@
       }
     }
 
-    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); syncTopics(); applyFilters(); });
-    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); applyFilters(); });
-    el.searchInput.addEventListener("input", () => { clearGuideFilter(); clearReviewAgainMode(); applyFilters(); });
+    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); syncTopics(); applyFilters(); });
+    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
+    el.searchInput.addEventListener("input", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
     el.trapOnly.addEventListener("change", applyFilters);
     el.hideMastered.addEventListener("change", applyFilters);
     el.guideButtons.forEach(button => button.addEventListener("click", () => applyGuideFilter(button)));
     el.reviewAgainBtn.addEventListener("click", applyReviewAgainMode);
+    el.quizModeBtn.addEventListener("click", applyQuizMode);
     el.shuffleBtn.addEventListener("click", shuffleCards);
     el.resetBtn.addEventListener("click", () => {
       review = {};
@@ -911,6 +1073,7 @@
       flipped = false;
       clearGuideFilter();
       clearReviewAgainMode();
+      clearQuizMode();
       applyFilters();
     });
     el.prevBtn.addEventListener("click", () => move(-1));
