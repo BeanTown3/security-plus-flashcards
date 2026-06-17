@@ -1,6 +1,28 @@
 # Security+ Flashcards
 
-An interactive CompTIA Security+ study deck built from personal study notes in Notion. The project turns exam notes into searchable flashcards with deck filters, trap-card review, progress tracking, and simple spaced-review style ratings.
+An interactive CompTIA Security+ study deck built from personal study notes in Notion. The project turns exam notes into searchable flashcards with deck filters, trap-card review, missed-card practice, quiz mode, progress tracking, and a polished dark dashboard interface.
+
+## Live Demo
+
+[Open the live Security+ flashcard app](https://beantown3.github.io/security-plus-flashcards/)
+
+## Screenshots
+
+### Dashboard
+
+![Security+ flashcard dashboard](assets/screenshots/dashboard.png)
+
+### Answer View
+
+![Security+ flashcard answer view](assets/screenshots/answer-view.png)
+
+### Quiz Mode
+
+![Security+ quiz mode](assets/screenshots/quiz-mode.png)
+
+### Review Again Mode
+
+![Security+ Review Again mode](assets/screenshots/review-again.png)
 
 ## Why I Built This
 
@@ -9,12 +31,11 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 ## Features
 
 - 46 flashcards based on CompTIA Security+ notes
-- Deck filters for:
-  - Section 2: Fundamentals of Security
-  - Section 3: Threat Actors
+- Deck filters for Section 2: Fundamentals of Security and Section 3: Threat Actors
+- Clickable topic shortcuts for high-level review areas
 - Topic and keyword search
 - Trap-card mode for high-mistake exam scenarios
-- Flip-card interaction
+- Flip-card interaction with bold centered answer formatting
 - Shuffle and random-card practice
 - Again / Good / Mastered ratings
 - Dedicated Review Again mode for missed cards
@@ -46,13 +67,22 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - CSS
 - JavaScript
 - Notion notes as the study source
+- GitHub Pages for hosting
 - AI-assisted development with Codex
 
 ## How To Use
 
-Open `index.html` in a browser. No build tools or server are required.
+Open the [live demo](https://beantown3.github.io/security-plus-flashcards/) or open `index.html` locally in a browser. No build tools or server are required.
 
-Use the deck dropdown to choose a section, search for a topic, flip cards to reveal answers, and rate cards as you study.
+Use the deck dropdown to choose a section, click a topic shortcut, search for a term, flip cards to reveal answers, and rate cards as you study. Cards marked **Again** appear in the Review Again mode for focused practice.
+
+## What I Learned
+
+- How to turn study notes into an interactive web app
+- How to organize a small frontend project for a GitHub portfolio
+- How browser `localStorage` can save progress without a backend
+- How GitHub Pages can publish a static website
+- How AI can help build a project while I continue learning the code and concepts
 
 ## Project Goals
 
@@ -61,13 +91,14 @@ Use the deck dropdown to choose a section, search for a topic, flip cards to rev
 - Learn how to structure and explain a small web app
 - Keep improving the deck as new study sections are added
 
-## Roadmap
+## Future Improvements
 
 - Add more Security+ chapters from Notion
-- Move flashcard data into a separate JSON file
-- Add screenshots to the README
-- Publish with GitHub Pages
+- Move flashcard data into a separate `cards.json` file
+- Split the project into separate `style.css` and `app.js` files
 - Add import/export for progress
+- Add charts for quiz scores and study history
+- Improve mobile layout polish
 
 ## Notes
 
