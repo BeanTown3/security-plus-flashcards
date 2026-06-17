@@ -315,6 +315,7 @@
       backface-visibility: hidden;
       display: grid;
       grid-template-rows: auto 1fr auto;
+      justify-items: center;
       padding: 22px;
       overflow: hidden;
     }
@@ -349,12 +350,32 @@
       line-height: 1.28;
       margin: 0;
       align-self: center;
+      max-width: 980px;
+      text-align: center;
     }
 
     .answer {
-      font-size: clamp(1.05rem, 2vw, 1.38rem);
-      line-height: 1.45;
+      display: grid;
+      gap: 14px;
       align-self: center;
+      justify-items: center;
+      max-width: 960px;
+      text-align: center;
+    }
+
+    .answer-headline {
+      display: inline-block;
+      color: var(--ink);
+      font-size: clamp(2rem, 4.1vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .answer-detail {
+      color: #cbd5e1;
+      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+      line-height: 1.48;
+      font-weight: 500;
     }
 
     .trap-note {
@@ -365,6 +386,7 @@
       border-radius: 6px;
       margin-top: 14px;
       font-size: 0.95rem;
+      text-align: center;
     }
 
     .hint {
@@ -681,6 +703,26 @@
       render();
     }
 
+    function escHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatAnswer(text) {
+      const clean = String(text).trim();
+      const split = clean.match(/^(.{2,90}?)(?:\.\s+|\s+[—-]\s+)(.+)$/);
+      if (!split) {
+        return `<span class="answer-headline">${escHtml(clean)}</span>`;
+      }
+      return `
+        <span class="answer-headline">${escHtml(split[1])}</span>
+        <span class="answer-detail">${escHtml(split[2])}</span>
+      `;
+    }
+
     function render() {
       el.totalCards.textContent = cards.length;
       el.deckCount.textContent = filtered.length;
@@ -712,7 +754,7 @@
               ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
               ${rating ? `<span class="tag">${rating}</span>` : ""}
             </div>
-            <p class="prompt">${card.q}</p>
+            <p class="prompt">${escHtml(card.q)}</p>
             <p class="hint">Click Flip Card or press Space to reveal the answer.</p>
           </section>
           <section class="face back">
@@ -722,7 +764,7 @@
               <span class="tag diff">${card.difficulty}</span>
               ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
             </div>
-            <div class="answer">${card.a}${card.trapNote ? `<div class="trap-note">${card.trapNote}</div>` : ""}</div>
+            <div class="answer">${formatAnswer(card.a)}${card.trapNote ? `<div class="trap-note">${escHtml(card.trapNote)}</div>` : ""}</div>
             <p class="hint">Rate the card, then continue.</p>
           </section>
         </article>
