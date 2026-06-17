@@ -19,6 +19,7 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - Again / Good / Mastered ratings
 - Dedicated Review Again mode for missed cards
 - Multiple-choice quiz mode with score tracking
+- Daily reviewed-card count and study streak tracking
 - Browser local storage for review progress
 - Offline-friendly single-page HTML app
 

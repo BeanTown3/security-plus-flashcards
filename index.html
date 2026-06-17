@@ -97,7 +97,7 @@
 
     .dashboard {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 12px;
       margin: 18px 0;
     }
@@ -124,6 +124,8 @@
     .metric:nth-child(2)::before { background: var(--green); }
     .metric:nth-child(3)::before { background: var(--red); }
     .metric:nth-child(4)::before { background: var(--gold); }
+    .metric:nth-child(5)::before { background: var(--purple); }
+    .metric:nth-child(6)::before { background: var(--blue); }
 
     .metric span {
       display: block;
@@ -559,6 +561,8 @@
       <div class="metric"><span>Current Deck</span><strong id="deckCount">0</strong></div>
       <div class="metric"><span>Trap Cards</span><strong id="trapCount">0</strong></div>
       <div class="metric"><span>Need Review</span><strong id="reviewedCount">0</strong></div>
+      <div class="metric"><span>Today</span><strong id="todayCount">0</strong></div>
+      <div class="metric"><span>Streak</span><strong id="streakCount">0</strong></div>
     </section>
 
     <div class="layout">
@@ -717,6 +721,7 @@
     let index = 0;
     let flipped = false;
     let review = JSON.parse(localStorage.getItem("secplusReview") || "{}");
+    let studyStats = JSON.parse(localStorage.getItem("secplusStudyStats") || "{}");
     let activeGuideTopics = null;
     let activeGuideId = null;
     let reviewAgainMode = false;
@@ -731,6 +736,8 @@
       deckCount: document.getElementById("deckCount"),
       trapCount: document.getElementById("trapCount"),
       reviewedCount: document.getElementById("reviewedCount"),
+      todayCount: document.getElementById("todayCount"),
+      streakCount: document.getElementById("streakCount"),
       deckSelect: document.getElementById("deckSelect"),
       topicSelect: document.getElementById("topicSelect"),
       searchInput: document.getElementById("searchInput"),
@@ -757,6 +764,44 @@
 
     function cardId(card) {
       return `${card.deck}:${card.topic}:${card.q.slice(0, 40)}`;
+    }
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function daysBetween(firstDate, secondDate) {
+      const day = 24 * 60 * 60 * 1000;
+      return Math.round((new Date(secondDate) - new Date(firstDate)) / day);
+    }
+
+    function normalizeStudyStats() {
+      const today = todayKey();
+      if (!studyStats.todayDate) {
+        studyStats = { todayDate: today, reviewedToday: 0, streak: 0, lastStudyDate: null };
+      }
+      if (studyStats.todayDate !== today) {
+        studyStats.todayDate = today;
+        studyStats.reviewedToday = 0;
+      }
+      return studyStats;
+    }
+
+    function saveStudyStats() {
+      localStorage.setItem("secplusStudyStats", JSON.stringify(studyStats));
+    }
+
+    function recordStudyActivity() {
+      const today = todayKey();
+      normalizeStudyStats();
+      if (studyStats.lastStudyDate !== today) {
+        studyStats.streak = studyStats.lastStudyDate && daysBetween(studyStats.lastStudyDate, today) === 1
+          ? (studyStats.streak || 0) + 1
+          : 1;
+        studyStats.lastStudyDate = today;
+      }
+      studyStats.reviewedToday = (studyStats.reviewedToday || 0) + 1;
+      saveStudyStats();
     }
 
     function topicsForDeck(deck) {
@@ -937,6 +982,9 @@
       el.deckCount.textContent = filtered.length;
       el.trapCount.textContent = filtered.filter(card => card.trap).length;
       el.reviewedCount.textContent = Object.values(review).filter(value => value === "again").length;
+      normalizeStudyStats();
+      el.todayCount.textContent = studyStats.reviewedToday || 0;
+      el.streakCount.textContent = `${studyStats.streak || 0}d`;
 
       el.activeTitle.textContent = quizMode ? "Quiz Mode" : (reviewAgainMode ? "Review Again cards" : deckNames[el.deckSelect.value]);
       el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
@@ -1043,6 +1091,7 @@
         review[cardId(card)] = "again";
       }
       localStorage.setItem("secplusReview", JSON.stringify(review));
+      recordStudyActivity();
       render();
     }
 
@@ -1050,6 +1099,7 @@
       if (!filtered.length) return;
       review[cardId(filtered[index])] = value;
       localStorage.setItem("secplusReview", JSON.stringify(review));
+      recordStudyActivity();
       if (reviewAgainMode || el.hideMastered.checked) {
         applyFilters();
       } else {
@@ -1068,7 +1118,9 @@
     el.shuffleBtn.addEventListener("click", shuffleCards);
     el.resetBtn.addEventListener("click", () => {
       review = {};
+      studyStats = {};
       localStorage.removeItem("secplusReview");
+      localStorage.removeItem("secplusStudyStats");
       index = 0;
       flipped = false;
       clearGuideFilter();
