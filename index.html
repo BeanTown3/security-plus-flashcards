@@ -225,6 +225,11 @@
       padding: 10px;
       position: relative;
       overflow: hidden;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+      width: 100%;
     }
 
     .mini-topic::before {
@@ -233,6 +238,17 @@
       inset: 0 0 auto;
       height: 3px;
       background: var(--purple);
+    }
+
+    .mini-topic:hover,
+    .mini-topic.active {
+      background: #314057;
+      border-color: #64748b;
+      transform: translateY(-1px);
+    }
+
+    .mini-topic.active::before {
+      background: linear-gradient(90deg, var(--blue), var(--purple));
     }
 
     .mini-topic strong {
@@ -521,10 +537,10 @@
         </div>
 
         <div class="section-list" aria-label="Topic summary">
-          <div class="mini-topic"><strong>CIA, AAA, Zero Trust</strong><span>Core Section 2 exam foundations.</span></div>
-          <div class="mini-topic"><strong>Control categories and types</strong><span>Technical, managerial, operational, physical plus six types.</span></div>
-          <div class="mini-topic"><strong>Threat actors and vectors</strong><span>Who, how, where, motivations, and exam traps.</span></div>
-          <div class="mini-topic"><strong>Honey family</strong><span>Honeytoken, honeyfile, honeypot, honeynet by scale.</span></div>
+          <button class="mini-topic" type="button" data-guide="foundations" data-deck="fundamentals" data-topics="CIA Triad,AAA,Zero Trust,Non-repudiation,Risk,Gap Analysis"><strong>CIA, AAA, Zero Trust</strong><span>Core Section 2 exam foundations.</span></button>
+          <button class="mini-topic" type="button" data-guide="controls" data-deck="fundamentals" data-topics="Controls"><strong>Control categories and types</strong><span>Technical, managerial, operational, physical plus six types.</span></button>
+          <button class="mini-topic" type="button" data-guide="actors" data-deck="threats" data-topics="Threat Actor Basics,Nation-state/APT,Actor Types,Insider/Shadow IT,Threat Vectors,Bluetooth/Wired,Social Engineering,Motivation"><strong>Threat actors and vectors</strong><span>Who, how, where, motivations, and exam traps.</span></button>
+          <button class="mini-topic" type="button" data-guide="honey" data-deck="threats" data-topics="Deception"><strong>Honey family</strong><span>Honeytoken, honeyfile, honeypot, honeynet by scale.</span></button>
         </div>
       </aside>
 
@@ -642,6 +658,8 @@
     let index = 0;
     let flipped = false;
     let review = JSON.parse(localStorage.getItem("secplusReview") || "{}");
+    let activeGuideTopics = null;
+    let activeGuideId = null;
 
     const el = {
       totalCards: document.getElementById("totalCards"),
@@ -655,6 +673,7 @@
       hideMastered: document.getElementById("hideMastered"),
       shuffleBtn: document.getElementById("shuffleBtn"),
       resetBtn: document.getElementById("resetBtn"),
+      guideButtons: document.querySelectorAll(".mini-topic"),
       activeTitle: document.getElementById("activeTitle"),
       activeSubtitle: document.getElementById("activeSubtitle"),
       positionText: document.getElementById("positionText"),
@@ -693,14 +712,38 @@
       filtered = cards.filter(card => {
         const matchesDeck = deck === "all" || card.deck === deck;
         const matchesTopic = topic === "all" || card.topic === topic;
+        const matchesGuide = !activeGuideTopics || activeGuideTopics.includes(card.topic);
         const matchesTerm = !term || `${card.q} ${card.a} ${card.topic}`.toLowerCase().includes(term);
         const matchesTrap = !el.trapOnly.checked || card.trap;
         const matchesMastered = !el.hideMastered.checked || review[cardId(card)] !== "mastered";
-        return matchesDeck && matchesTopic && matchesTerm && matchesTrap && matchesMastered;
+        return matchesDeck && matchesTopic && matchesGuide && matchesTerm && matchesTrap && matchesMastered;
       });
       index = Math.min(index, Math.max(filtered.length - 1, 0));
       flipped = false;
+      updateGuideButtons();
       render();
+    }
+
+    function clearGuideFilter() {
+      activeGuideTopics = null;
+      activeGuideId = null;
+      updateGuideButtons();
+    }
+
+    function updateGuideButtons() {
+      el.guideButtons.forEach(button => {
+        button.classList.toggle("active", button.dataset.guide === activeGuideId);
+      });
+    }
+
+    function applyGuideFilter(button) {
+      activeGuideId = button.dataset.guide;
+      activeGuideTopics = button.dataset.topics.split(",").map(topic => topic.trim());
+      el.deckSelect.value = button.dataset.deck || "all";
+      syncTopics();
+      el.topicSelect.value = "all";
+      el.searchInput.value = "";
+      applyFilters();
     }
 
     function escHtml(value) {
@@ -811,17 +854,19 @@
       move(1);
     }
 
-    el.deckSelect.addEventListener("change", () => { syncTopics(); applyFilters(); });
-    el.topicSelect.addEventListener("change", applyFilters);
-    el.searchInput.addEventListener("input", applyFilters);
+    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); syncTopics(); applyFilters(); });
+    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); applyFilters(); });
+    el.searchInput.addEventListener("input", () => { clearGuideFilter(); applyFilters(); });
     el.trapOnly.addEventListener("change", applyFilters);
     el.hideMastered.addEventListener("change", applyFilters);
+    el.guideButtons.forEach(button => button.addEventListener("click", () => applyGuideFilter(button)));
     el.shuffleBtn.addEventListener("click", shuffleCards);
     el.resetBtn.addEventListener("click", () => {
       review = {};
       localStorage.removeItem("secplusReview");
       index = 0;
       flipped = false;
+      clearGuideFilter();
       applyFilters();
     });
     el.prevBtn.addEventListener("click", () => move(-1));
