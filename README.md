@@ -17,6 +17,7 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - Flip-card interaction
 - Shuffle and random-card practice
 - Again / Good / Mastered ratings
+- Dedicated Review Again mode for missed cards
 - Browser local storage for review progress
 - Offline-friendly single-page HTML app
 

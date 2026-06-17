@@ -212,6 +212,18 @@
       margin-top: 14px;
     }
 
+    .review-again-btn {
+      width: 100%;
+      margin-top: 8px;
+      font-weight: 800;
+    }
+
+    .review-again-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
     .section-list {
       display: grid;
       gap: 10px;
@@ -502,7 +514,7 @@
       <div class="metric"><span>Total Cards</span><strong id="totalCards">0</strong></div>
       <div class="metric"><span>Current Deck</span><strong id="deckCount">0</strong></div>
       <div class="metric"><span>Trap Cards</span><strong id="trapCount">0</strong></div>
-      <div class="metric"><span>Reviewed</span><strong id="reviewedCount">0</strong></div>
+      <div class="metric"><span>Need Review</span><strong id="reviewedCount">0</strong></div>
     </section>
 
     <div class="layout">
@@ -535,6 +547,8 @@
           <button id="shuffleBtn" class="primary">Shuffle</button>
           <button id="resetBtn">Reset</button>
         </div>
+
+        <button id="reviewAgainBtn" class="danger review-again-btn">Review Again</button>
 
         <div class="section-list" aria-label="Topic summary">
           <button class="mini-topic" type="button" data-guide="foundations" data-deck="fundamentals" data-topics="CIA Triad,AAA,Zero Trust,Non-repudiation,Risk,Gap Analysis"><strong>CIA, AAA, Zero Trust</strong><span>Core Section 2 exam foundations.</span></button>
@@ -660,6 +674,7 @@
     let review = JSON.parse(localStorage.getItem("secplusReview") || "{}");
     let activeGuideTopics = null;
     let activeGuideId = null;
+    let reviewAgainMode = false;
 
     const el = {
       totalCards: document.getElementById("totalCards"),
@@ -673,6 +688,7 @@
       hideMastered: document.getElementById("hideMastered"),
       shuffleBtn: document.getElementById("shuffleBtn"),
       resetBtn: document.getElementById("resetBtn"),
+      reviewAgainBtn: document.getElementById("reviewAgainBtn"),
       guideButtons: document.querySelectorAll(".mini-topic"),
       activeTitle: document.getElementById("activeTitle"),
       activeSubtitle: document.getElementById("activeSubtitle"),
@@ -710,13 +726,15 @@
       const topic = el.topicSelect.value;
       const term = el.searchInput.value.trim().toLowerCase();
       filtered = cards.filter(card => {
+        const id = cardId(card);
         const matchesDeck = deck === "all" || card.deck === deck;
         const matchesTopic = topic === "all" || card.topic === topic;
         const matchesGuide = !activeGuideTopics || activeGuideTopics.includes(card.topic);
+        const matchesAgain = !reviewAgainMode || review[id] === "again";
         const matchesTerm = !term || `${card.q} ${card.a} ${card.topic}`.toLowerCase().includes(term);
         const matchesTrap = !el.trapOnly.checked || card.trap;
-        const matchesMastered = !el.hideMastered.checked || review[cardId(card)] !== "mastered";
-        return matchesDeck && matchesTopic && matchesGuide && matchesTerm && matchesTrap && matchesMastered;
+        const matchesMastered = !el.hideMastered.checked || review[id] !== "mastered";
+        return matchesDeck && matchesTopic && matchesGuide && matchesAgain && matchesTerm && matchesTrap && matchesMastered;
       });
       index = Math.min(index, Math.max(filtered.length - 1, 0));
       flipped = false;
@@ -730,6 +748,11 @@
       updateGuideButtons();
     }
 
+    function clearReviewAgainMode() {
+      reviewAgainMode = false;
+      el.reviewAgainBtn.classList.remove("active");
+    }
+
     function updateGuideButtons() {
       el.guideButtons.forEach(button => {
         button.classList.toggle("active", button.dataset.guide === activeGuideId);
@@ -737,12 +760,27 @@
     }
 
     function applyGuideFilter(button) {
+      clearReviewAgainMode();
       activeGuideId = button.dataset.guide;
       activeGuideTopics = button.dataset.topics.split(",").map(topic => topic.trim());
       el.deckSelect.value = button.dataset.deck || "all";
       syncTopics();
       el.topicSelect.value = "all";
       el.searchInput.value = "";
+      applyFilters();
+    }
+
+    function applyReviewAgainMode() {
+      clearGuideFilter();
+      reviewAgainMode = true;
+      el.reviewAgainBtn.classList.add("active");
+      el.deckSelect.value = "all";
+      syncTopics();
+      el.topicSelect.value = "all";
+      el.searchInput.value = "";
+      el.trapOnly.checked = false;
+      el.hideMastered.checked = false;
+      index = 0;
       applyFilters();
     }
 
@@ -770,10 +808,10 @@
       el.totalCards.textContent = cards.length;
       el.deckCount.textContent = filtered.length;
       el.trapCount.textContent = filtered.filter(card => card.trap).length;
-      el.reviewedCount.textContent = Object.keys(review).length;
+      el.reviewedCount.textContent = Object.values(review).filter(value => value === "again").length;
 
-      el.activeTitle.textContent = deckNames[el.deckSelect.value];
-      el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : "No cards match the current filters.";
+      el.activeTitle.textContent = reviewAgainMode ? "Review Again cards" : deckNames[el.deckSelect.value];
+      el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
       el.positionText.textContent = filtered.length ? `${index + 1} / ${filtered.length}` : "0 / 0";
       el.progressBar.style.width = filtered.length ? `${((index + 1) / filtered.length) * 100}%` : "0%";
 
@@ -781,7 +819,7 @@
       [el.prevBtn, el.flipBtn, el.nextBtn, el.randomBtn, el.againBtn, el.goodBtn, el.masteredBtn].forEach(button => button.disabled = disabled);
 
       if (!filtered.length) {
-        el.cardContainer.innerHTML = `<div class="empty">No cards match those filters. Widen the deck, topic, or search.</div>`;
+        el.cardContainer.innerHTML = `<div class="empty">${reviewAgainMode ? "No Again cards right now. Mark cards Again when you want them to show up here." : "No cards match those filters. Widen the deck, topic, or search."}</div>`;
         return;
       }
 
@@ -851,15 +889,20 @@
       if (!filtered.length) return;
       review[cardId(filtered[index])] = value;
       localStorage.setItem("secplusReview", JSON.stringify(review));
-      move(1);
+      if (reviewAgainMode || el.hideMastered.checked) {
+        applyFilters();
+      } else {
+        move(1);
+      }
     }
 
-    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); syncTopics(); applyFilters(); });
-    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); applyFilters(); });
-    el.searchInput.addEventListener("input", () => { clearGuideFilter(); applyFilters(); });
+    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); syncTopics(); applyFilters(); });
+    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); applyFilters(); });
+    el.searchInput.addEventListener("input", () => { clearGuideFilter(); clearReviewAgainMode(); applyFilters(); });
     el.trapOnly.addEventListener("change", applyFilters);
     el.hideMastered.addEventListener("change", applyFilters);
     el.guideButtons.forEach(button => button.addEventListener("click", () => applyGuideFilter(button)));
+    el.reviewAgainBtn.addEventListener("click", applyReviewAgainMode);
     el.shuffleBtn.addEventListener("click", shuffleCards);
     el.resetBtn.addEventListener("click", () => {
       review = {};
@@ -867,6 +910,7 @@
       index = 0;
       flipped = false;
       clearGuideFilter();
+      clearReviewAgainMode();
       applyFilters();
     });
     el.prevBtn.addEventListener("click", () => move(-1));
