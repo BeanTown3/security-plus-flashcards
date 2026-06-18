@@ -84,6 +84,12 @@ Use the deck dropdown to choose a section, click a topic shortcut, search for a 
 - How GitHub Pages can publish a static website
 - How AI can help build a project while I continue learning the code and concepts
 
+## Troubleshooting Case Study
+
+I documented an evidence-driven, AI-assisted investigation into a Windows sandbox permission failure encountered while preparing this project for LinkedIn. The case study covers hypothesis testing, log and ACL analysis, least-privilege remediation, validation, and an interview-ready STAR summary.
+
+[Read the Windows sandbox incident case study](docs/codex-browser-sandbox-case-study.md)
+
 ## Project Goals
 
 - Build a real study tool while preparing for Security+
