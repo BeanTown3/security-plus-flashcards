@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>CompTIA Security+ Study Deck</title>
   <style>
     :root {
@@ -22,14 +22,20 @@
 
     * { box-sizing: border-box; }
 
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       margin: 0;
+      min-height: 100svh;
       font-family: Inter, "Segoe UI", Arial, sans-serif;
       color: var(--ink);
       background:
         radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 300px),
         radial-gradient(circle at top right, rgba(139, 92, 246, 0.13), transparent 340px),
         var(--bg);
+      -webkit-font-smoothing: antialiased;
     }
 
     button, select, input {
@@ -43,6 +49,8 @@
       border-radius: 8px;
       padding: 0.65rem 0.85rem;
       cursor: pointer;
+      min-height: 44px;
+      touch-action: manipulation;
       transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
     }
 
@@ -185,7 +193,7 @@
       color: var(--ink);
       border-radius: 8px;
       padding: 0.68rem 0.75rem;
-      min-height: 42px;
+      min-height: 44px;
     }
 
     select:focus, input[type="search"]:focus {
@@ -359,7 +367,8 @@
       grid-template-rows: auto 1fr auto;
       justify-items: center;
       padding: 22px;
-      overflow: hidden;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .back {
@@ -544,6 +553,254 @@
         white-space: normal;
       }
     }
+
+    @media (max-width: 640px) {
+      body {
+        background:
+          radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 220px),
+          var(--bg);
+      }
+
+      button, select, input[type="search"] {
+        font-size: 16px;
+      }
+
+      button {
+        min-height: 48px;
+        padding: 0.72rem 0.7rem;
+      }
+
+      button:hover {
+        transform: none;
+      }
+
+      .shell {
+        width: 100%;
+        padding: max(14px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      }
+
+      header {
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      h1 {
+        font-size: 2.05rem;
+        line-height: 1.02;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+
+      .source {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.82rem;
+      }
+
+      .dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .metric {
+        min-height: 70px;
+        padding: 11px;
+        border-radius: 8px;
+      }
+
+      .metric span {
+        font-size: 0.68rem;
+        letter-spacing: 0.05em;
+      }
+
+      .metric strong {
+        margin-top: 5px;
+        font-size: 1.35rem;
+      }
+
+      aside, main {
+        border-radius: 10px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.2);
+      }
+
+      aside {
+        padding: 12px;
+      }
+
+      main {
+        padding: 12px;
+      }
+
+      .button-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .section-list {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 2px 2px 8px;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .mini-topic {
+        min-width: 205px;
+        scroll-snap-align: start;
+        border-radius: 8px;
+      }
+
+      .mini-topic strong {
+        font-size: 0.9rem;
+      }
+
+      .mini-topic span {
+        font-size: 0.78rem;
+      }
+
+      .study-top {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .deck-title h2 {
+        font-size: 1.12rem;
+      }
+
+      .deck-title p {
+        font-size: 0.9rem;
+        line-height: 1.35;
+      }
+
+      .card-stage, .flashcard {
+        min-height: min(560px, 64svh);
+      }
+
+      .face {
+        padding: 16px 14px;
+        border-radius: 10px;
+      }
+
+      .tags {
+        width: 100%;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .tag {
+        max-width: 100%;
+        border-radius: 7px;
+        padding: 5px 7px;
+        font-size: 0.72rem;
+        overflow-wrap: anywhere;
+      }
+
+      .prompt {
+        font-size: 1.18rem;
+        line-height: 1.34;
+        overflow-wrap: anywhere;
+      }
+
+      .answer {
+        gap: 10px;
+      }
+
+      .answer-headline {
+        font-size: 1.55rem;
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+      }
+
+      .answer-detail {
+        font-size: 1rem;
+        line-height: 1.42;
+        overflow-wrap: anywhere;
+      }
+
+      .trap-note {
+        width: 100%;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .hint {
+        font-size: 0.82rem;
+        margin-top: 12px;
+      }
+
+      .controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      #flipBtn {
+        grid-column: 1 / -1;
+        order: -1;
+      }
+
+      .rate-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        position: sticky;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 5;
+        padding: 8px;
+        margin: 10px -8px 0;
+        border: 1px solid rgba(51, 65, 85, 0.88);
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(10px);
+      }
+
+      .rate-row button {
+        padding-inline: 0.45rem;
+        font-size: 0.9rem;
+      }
+
+      .quiz-options {
+        gap: 8px;
+      }
+
+      .quiz-option {
+        min-height: 52px;
+        padding: 12px;
+        font-size: 0.95rem;
+      }
+
+      .topic-guide {
+        margin-top: 14px;
+      }
+
+      details {
+        border-radius: 9px;
+        padding: 11px 12px;
+      }
+
+      details ul {
+        padding-left: 18px;
+        font-size: 0.93rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .rate-row {
+        grid-template-columns: 1fr;
+      }
+
+      .card-stage, .flashcard {
+        min-height: min(590px, 68svh);
+      }
+    }
   </style>
 </head>
 <body>
@@ -551,7 +808,7 @@
     <header>
       <div>
         <h1>CompTIA Security+ Study Deck</h1>
-        <p class="subtitle">Flashcards and quick review notes generated from your Notion pages: Section 2 Fundamentals of Security and Section 3 Threat Actors.</p>
+        <p class="subtitle">Flashcards and quick review notes generated from your Notion pages: Sections 2-7 for Security+ review.</p>
       </div>
       <div class="source">Source: Notion Security+ notes</div>
     </header>
@@ -573,6 +830,10 @@
             <option value="all">All Security+ cards</option>
             <option value="fundamentals">Section 2: Fundamentals</option>
             <option value="threats">Section 3: Threat Actors</option>
+            <option value="physical">Section 4: Physical Security</option>
+            <option value="social">Section 5: Social Engineering</option>
+            <option value="malware">Section 6: Malware</option>
+            <option value="data">Section 7: Data Protection</option>
           </select>
         </div>
 
@@ -604,6 +865,10 @@
           <button class="mini-topic" type="button" data-guide="controls" data-deck="fundamentals" data-topics="Controls"><strong>Control categories and types</strong><span>Technical, managerial, operational, physical plus six types.</span></button>
           <button class="mini-topic" type="button" data-guide="actors" data-deck="threats" data-topics="Threat Actor Basics,Nation-state/APT,Actor Types,Insider/Shadow IT,Threat Vectors,Bluetooth/Wired,Social Engineering,Motivation"><strong>Threat actors and vectors</strong><span>Who, how, where, motivations, and exam traps.</span></button>
           <button class="mini-topic" type="button" data-guide="honey" data-deck="threats" data-topics="Deception"><strong>Honey family</strong><span>Honeytoken, honeyfile, honeypot, honeynet by scale.</span></button>
+          <button class="mini-topic" type="button" data-guide="physical" data-deck="physical" data-topics="Physical Controls,Surveillance,Access Control,Biometrics,Badge Cloning"><strong>Physical security</strong><span>Bollards, vestibules, sensors, badges, and biometric traps.</span></button>
+          <button class="mini-topic" type="button" data-guide="social" data-deck="social" data-topics="Triggers,Impersonation,Phishing,Scams,Influence,Physical Social Engineering"><strong>Social engineering</strong><span>Human-focused attacks, phishing flavors, scams, and awareness.</span></button>
+          <button class="mini-topic" type="button" data-guide="malware" data-deck="malware" data-topics="Malware Basics,Virus/Worm/Trojan,Ransomware,Botnets,Rootkits,Persistence,Keyloggers,Fileless Malware,Indicators"><strong>Malware</strong><span>Malware types, persistence, and indicators of compromise.</span></button>
+          <button class="mini-topic" type="button" data-guide="data" data-deck="data" data-topics="Classification,Ownership,Data States,Data Types,Data Sovereignty,Data Security Methods,DLP"><strong>Data protection</strong><span>Classification, ownership, data states, sovereignty, and DLP.</span></button>
         </div>
       </aside>
 
@@ -654,6 +919,46 @@
               <li>Organized crime is money-driven, even when tooling is advanced or the group acts as a proxy.</li>
               <li>Shadow IT is usually convenience-driven, not automatically malicious, but still creates unmanaged risk.</li>
               <li>Honey family by scale: honeytoken, honeyfile, honeypot, honeynet.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 4: Physical Security</summary>
+            <ul>
+              <li>Bollards stop vehicles; fences define and delay perimeter intrusion.</li>
+              <li>Access control vestibules prevent tailgating and piggybacking by controlling one door at a time.</li>
+              <li>Piggybacking involves consent; tailgating does not.</li>
+              <li>Biometric sensitivity lowers FAR while raising FRR; CER is the balance point.</li>
+              <li>RFID and NFC badge cloning is a physical attack indicator on the exam.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 5: Social Engineering</summary>
+            <ul>
+              <li>Social engineering attacks the human decision process, not the firewall.</li>
+              <li>Pretexting is the story; impersonation is the false identity.</li>
+              <li>BEC uses a real compromised internal email account, which makes it harder to spot.</li>
+              <li>Misinformation is false without intent; disinformation is deliberate deception.</li>
+              <li>Security awareness training should be recurring and reinforced with simulations.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 6: Malware</summary>
+            <ul>
+              <li>Virus requires a host file and user action; worm spreads by itself.</li>
+              <li>Ransomware encrypts files and demands payment; isolate first and restore from known-good backups.</li>
+              <li>Rootkits hide at kernel level and require external boot scanning for reliable detection.</li>
+              <li>Logic bombs wait for a date, event, or condition before executing.</li>
+              <li>Impossible travel, missing logs, resource spikes, and out-of-cycle logging are compromise indicators.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 7: Data Protection</summary>
+            <ul>
+              <li>Data Owners classify data; Data Custodians manage the systems that protect it.</li>
+              <li>Data at rest, in transit, and in use each need different protection methods.</li>
+              <li>Tokenization replaces data with a vault-backed token; encryption is reversible with a key.</li>
+              <li>Data sovereignty follows the physical location of the data.</li>
+              <li>DLP location matters: endpoint catches activity on the device; network catches data leaving the perimeter.</li>
             </ul>
           </details>
         </section>
@@ -708,13 +1013,144 @@
       {deck:"threats", topic:"Social Engineering", objective:"2.2", difficulty:"Medium", trap:false, q:"An attacker compromises a site that target employees frequently visit and uses it to deliver malware. What is this called?", a:"Watering hole attack. The attacker poisons a trusted third-party site."},
       {deck:"threats", topic:"Social Engineering", objective:"2.2", difficulty:"Medium", trap:true, q:"Fake domains like g00gle.com or amzon.com are registered to catch mistyped URLs. What is this vector?", a:"Typosquatting. It relies on users mistyping trusted domains.", trapNote:"Brand impersonation is broader; typosquatting specifically abuses URL mistakes."},
       {deck:"threats", topic:"Motivation", objective:"2.1", difficulty:"Hard", trap:true, q:"An attacker steals private photos and threatens release unless the victim pays. What is the motivation, and is it ransomware?", a:"The motivation is blackmail. It is not ransomware unless data is encrypted to deny access.", trapNote:"Stolen data plus payment demand is blackmail. Encryption plus payment demand is ransomware."},
-      {deck:"threats", topic:"Motivation", objective:"2.1", difficulty:"Hard", trap:true, q:"A foreign intelligence service hires a criminal group to attack a rival nation's bank. What actor category is the criminal group?", a:"Organized crime. Even as a proxy, their motivation is financial gain.", trapNote:"Follow the motivation, not just the sponsor."}
+      {deck:"threats", topic:"Motivation", objective:"2.1", difficulty:"Hard", trap:true, q:"A foreign intelligence service hires a criminal group to attack a rival nation's bank. What actor category is the criminal group?", a:"Organized crime. Even as a proxy, their motivation is financial gain.", trapNote:"Follow the motivation, not just the sponsor."},
+
+      {deck:"physical", topic:"Physical Controls", objective:"1.2", difficulty:"Medium", trap:true, q:"A facilities manager wants to prevent vehicles from ramming the data center entrance, so they install a tall chain-link fence. Is this the correct control?", a:"No. Fencing deters and delays human intruders across a perimeter. Bollards are the correct control for stopping vehicular threats at specific entry points.", trapNote:"Fences slow people. Bollards stop vehicles."},
+      {deck:"physical", topic:"Physical Controls", objective:"2.4", difficulty:"Medium", trap:false, q:"What are four physical brute force attack methods listed in the Section 4 notes?", a:"Forcible entry, tampering with security devices, confronting security personnel, and ramming barriers with vehicles."},
+      {deck:"physical", topic:"Surveillance", objective:"2.4", difficulty:"Medium", trap:false, q:"A security analyst finds paint sprayed over parking garage cameras shortly before a server room break-in. Which surveillance bypass technique was used?", a:"Visual obstruction. The attacker physically blocked the camera's line of sight to remove detection capability."},
+      {deck:"physical", topic:"Surveillance", objective:"1.2", difficulty:"Hard", trap:true, q:"Which sensor type is best for detecting a warm body in a secured warehouse at night, even if the intruder moves slowly?", a:"Infrared sensor. It detects changes in infrared radiation from warm bodies instead of relying only on motion speed.", trapNote:"Microwave and ultrasonic sensors detect motion through reflected waves. Infrared detects heat."},
+      {deck:"physical", topic:"Surveillance", objective:"2.4", difficulty:"Medium", trap:false, q:"An attacker jams the wireless signals used by surveillance cameras during a breach. What bypass method is this?", a:"Electromagnetic interference, or EMI. It disrupts wireless surveillance communications."},
+      {deck:"physical", topic:"Access Control", objective:"1.2", difficulty:"Easy", trap:false, q:"What is an access control vestibule designed to prevent?", a:"Tailgating and piggybacking. The double-door buffer allows only one door to open at a time and forces identity checks."},
+      {deck:"physical", topic:"Access Control", objective:"2.4", difficulty:"Medium", trap:true, q:"An employee knowingly holds the door open for a contractor they recognize, but the contractor is not authorized. What attack occurred?", a:"Piggybacking. The authorized person knowingly allowed the unauthorized person in, even if they were deceived.", trapNote:"Piggybacking includes consent. Tailgating happens without the authorized person's awareness."},
+      {deck:"physical", topic:"Access Control", objective:"2.4", difficulty:"Easy", trap:false, q:"A penetration tester walks closely behind an employee through a secured door without the employee noticing. What technique is this?", a:"Tailgating. The attacker follows through without the authorized person's knowledge or consent."},
+      {deck:"physical", topic:"Biometrics", objective:"1.2", difficulty:"Hard", trap:true, q:"A biometric door lock has a very low FAR, but employees are frequently locked out. What likely happened?", a:"Scanner sensitivity is high. That lowers false acceptance rate but raises false rejection rate. CER is the balance point where FAR and FRR meet.", trapNote:"FAR and FRR move in opposite directions when sensitivity changes."},
+      {deck:"physical", topic:"Biometrics", objective:"1.2", difficulty:"Medium", trap:true, q:"A vendor says a fingerprint scanner has a CER of 3 percent. What does CER mean?", a:"Crossover Error Rate. It is the point where FAR equals FRR, and lower CER generally means better biometric accuracy.", trapNote:"CER is not a single failed login; it is a performance balance metric."},
+      {deck:"physical", topic:"Badge Cloning", objective:"2.4", difficulty:"Hard", trap:true, q:"An attacker scans an employee's RFID badge on public transit, writes the data to a blank card, and enters the building later. Under which attack category does this fall?", a:"Physical attack, specifically RFID badge cloning. The Security+ objective treats badge cloning as a physical attack indicator.", trapNote:"Do not classify this primarily as a network attack just because RFID is wireless."},
+      {deck:"physical", topic:"Badge Cloning", objective:"2.4", difficulty:"Medium", trap:false, q:"Name four countermeasures against access badge cloning.", a:"Use encrypted badge systems, add MFA at entry points, provide shielded wallets or sleeves, and monitor access logs for anomalous entry patterns."},
+
+      {deck:"social", topic:"Triggers", objective:"5.6", difficulty:"Medium", trap:false, q:"A caller claims to be the IT director and demands an immediate password reset or systems will go offline. Which motivational triggers are being used?", a:"Authority and urgency. The attacker uses a perceived superior plus time pressure to prevent careful verification."},
+      {deck:"social", topic:"Triggers", objective:"5.6", difficulty:"Easy", trap:false, q:"What are the six motivational triggers social engineers use?", a:"Authority, urgency, social proof, scarcity, likability, and fear."},
+      {deck:"social", topic:"Impersonation", objective:"2.2", difficulty:"Hard", trap:true, q:"A caller says they are from vendor support and invents an account error so the employee will reveal their username. What technique was used?", a:"Pretexting. The attacker created a fabricated scenario to get the victim to fill in information gaps.", trapNote:"Pretexting is the story. Impersonation is the false identity."},
+      {deck:"social", topic:"Impersonation", objective:"2.2", difficulty:"Medium", trap:true, q:"Misspelled company domains such as companyy.com are registered and serve fake login pages. What attack is this?", a:"Typosquatting, also called URL hijacking or cybersquatting. It captures users who mistype trusted domains.", trapNote:"Brand impersonation is broader; typosquatting is specifically typo-based domains."},
+      {deck:"social", topic:"Impersonation", objective:"2.2", difficulty:"Medium", trap:false, q:"Employees are infected after visiting an industry news site they already trust. No phishing email was sent. What attack technique was used?", a:"Watering hole attack. The attacker compromised a trusted third-party website frequented by the target group."},
+      {deck:"social", topic:"Phishing", objective:"2.2", difficulty:"Hard", trap:true, q:"An employee receives an urgent wire request from the CFO's real company email account. Is this phishing, whaling, or BEC?", a:"Business Email Compromise, or BEC. The message uses a real compromised internal account to trick employees.", trapNote:"Whaling targets executives as victims. BEC often uses an executive account to victimize others."},
+      {deck:"social", topic:"Phishing", objective:"2.2", difficulty:"Medium", trap:true, q:"A personalized phishing campaign targets the CEO and CFO using details from recent board meetings. What specific phishing type is this?", a:"Whaling. It is spear phishing specifically aimed at high-profile executives.", trapNote:"Whaling is a subset of spear phishing, not a totally separate family."},
+      {deck:"social", topic:"Phishing", objective:"5.6", difficulty:"Medium", trap:false, q:"A company held security awareness training once in January, then suffered a successful phishing attack six months later. What should change?", a:"Training should be recurring and reinforced with simulated phishing campaigns and remedial training for users who fail."},
+      {deck:"social", topic:"Scams", objective:"2.2", difficulty:"Hard", trap:true, q:"One victim is tricked into wiring money once; another has an SSN used to open several credit cards. Which is identity fraud and which is identity theft?", a:"The wire transfer is identity fraud or a single deceptive transaction. The SSN used to open multiple accounts is identity theft, a broader assumption of identity.", trapNote:"Fraud is usually one act. Theft is broader identity takeover."},
+      {deck:"social", topic:"Influence", objective:"2.2", difficulty:"Hard", trap:true, q:"A false article spreads online and investigators find it was created and funded by a foreign government to deceive the public. Is this misinformation or disinformation?", a:"Disinformation. It is deliberately created or shared false information with intent to deceive.", trapNote:"Misinformation is false information shared without deceptive intent."},
+      {deck:"social", topic:"Physical Social Engineering", objective:"2.2", difficulty:"Easy", trap:false, q:"An attacker leaves USB drives labeled Q4 Salary Review in the parking lot and an employee plugs one in. What attack is this?", a:"Baiting. The attacker uses a physical lure to exploit curiosity and deliver malware."},
+      {deck:"social", topic:"Physical Social Engineering", objective:"5.6", difficulty:"Medium", trap:false, q:"What controls help reduce dumpster diving and shoulder surfing risk?", a:"Secure document disposal and clean desk policies reduce dumpster diving. Privacy screens and situational awareness reduce shoulder surfing."},
+
+      {deck:"malware", topic:"Malware Basics", objective:"2.4", difficulty:"Easy", trap:false, q:"What is malware?", a:"Malware is malicious software intentionally designed to infiltrate, damage, or gain unauthorized access to systems without user consent."},
+      {deck:"malware", topic:"Virus/Worm/Trojan", objective:"2.4", difficulty:"Hard", trap:true, q:"Malware spreads to other computers on the network without anyone clicking or opening files. Is this a virus or a worm?", a:"Worm. Worms are self-replicating and spread without user interaction. Viruses require a host file and user action.", trapNote:"No user interaction is the worm signal."},
+      {deck:"malware", topic:"Virus/Worm/Trojan", objective:"2.4", difficulty:"Medium", trap:false, q:"A fake PDF reader secretly opens a remote shell back to the attacker. What two malware terms apply?", a:"Trojan and RAT. It is a Trojan because it is disguised as legitimate software, and a Remote Access Trojan because it grants remote control."},
+      {deck:"malware", topic:"Virus/Worm/Trojan", objective:"2.4", difficulty:"Hard", trap:true, q:"What is the difference between a polymorphic virus and a metamorphic virus?", a:"A polymorphic virus changes its decryption code. A metamorphic virus rewrites its whole codebase, making it more advanced.", trapNote:"Polymorphic changes the wrapper or decryptor. Metamorphic rewrites everything."},
+      {deck:"malware", topic:"Ransomware", objective:"2.4", difficulty:"Medium", trap:true, q:"A user reports encrypted files and a Bitcoin payment demand. What is the malware type and first correct response?", a:"Ransomware. Disconnect or isolate the machine first, then restore from known-good backups. Do not pay the ransom.", trapNote:"Payment does not guarantee recovery and is not the exam's preferred response."},
+      {deck:"malware", topic:"Botnets", objective:"2.4", difficulty:"Medium", trap:false, q:"Security tools report unusual CPU and bandwidth spikes on 200 endpoints late at night. What is the likely explanation?", a:"The endpoints may be zombies in a botnet, receiving instructions from a command and control node."},
+      {deck:"malware", topic:"Botnets", objective:"2.4", difficulty:"Easy", trap:false, q:"What is the difference between a botnet, a zombie, and a C2 node?", a:"A botnet is the network of compromised devices. A zombie is one compromised device. The C2 node is the attacker's command server."},
+      {deck:"malware", topic:"Rootkits", objective:"2.4", difficulty:"Hard", trap:true, q:"A rootkit is confirmed, but antivirus running inside the infected OS says no threats are found. Why, and how should it be detected?", a:"The rootkit can hide at Ring 0, blinding the OS and security tools. Boot from external media and scan from outside the compromised OS.", trapNote:"You cannot reliably trust tools running inside an OS controlled by a rootkit."},
+      {deck:"malware", topic:"Persistence", objective:"2.4", difficulty:"Medium", trap:false, q:"A disgruntled sysadmin plants code that deletes database records on their termination date. What malware type is this?", a:"Logic bomb. It stays dormant until a specific date, event, or condition triggers execution."},
+      {deck:"malware", topic:"Keyloggers", objective:"2.4", difficulty:"Hard", trap:true, q:"A physical device is found between a CFO's keyboard cable and computer. What is it and why is it dangerous?", a:"Hardware keylogger. It captures keystrokes and bypasses software-based controls, so physical inspection is required.", trapNote:"Software tools may not detect hardware keyloggers."},
+      {deck:"malware", topic:"Fileless Malware", objective:"2.4", difficulty:"Hard", trap:true, q:"A malware sample runs entirely in RAM and uses PowerShell with no file written to disk. What technique is this?", a:"Fileless malware. It evades signature-based antivirus because there is no traditional executable file to scan.", trapNote:"Fileless does not mean traceless. Memory artifacts and logs may still exist."},
+      {deck:"malware", topic:"Indicators", objective:"2.4", difficulty:"Hard", trap:true, q:"A user's account logs in from New York at 8:00 AM and Tokyo at 8:15 AM. What IoC is this?", a:"Impossible travel. It indicates likely credential compromise or account takeover.", trapNote:"This is an identity compromise indicator, not a normal network routing issue."},
+      {deck:"malware", topic:"Indicators", objective:"2.4", difficulty:"Medium", trap:true, q:"Security event logs from Tuesday night are missing, but every other day is present. What IoC is this?", a:"Missing logs. Treat it as possible attacker tampering or evidence destruction until proven otherwise.", trapNote:"Missing logs can be a compromise signal, not just a logging inconvenience."},
+
+      {deck:"data", topic:"Classification", objective:"3.3", difficulty:"Hard", trap:true, q:"Who sets data classification: the Data Owner, IT department, CIO, or Data Custodian?", a:"The Data Owner. The owner understands the data's business value and decides classification and protection requirements.", trapNote:"IT and custodians enforce controls; they do not decide the classification."},
+      {deck:"data", topic:"Classification", objective:"3.3", difficulty:"Medium", trap:false, q:"List the commercial data classification levels from low to high.", a:"Public, Sensitive, Private, Confidential, and Critical."},
+      {deck:"data", topic:"Ownership", objective:"5.1", difficulty:"Medium", trap:true, q:"The IT manager says she should be Data Owner for HR records because her team runs the servers. Is this correct?", a:"No. A business-side senior leader such as the HR Director should be Data Owner. IT acts as custodian by managing systems and controls.", trapNote:"Owner decides. Custodian executes and protects."},
+      {deck:"data", topic:"Ownership", objective:"5.1", difficulty:"Hard", trap:true, q:"A third-party payroll firm decides how salary data is collected and why it is used. Is it the Data Controller or Data Processor?", a:"Data Controller. The controller determines the purpose and method of processing. A processor handles data under the controller's instructions.", trapNote:"Controller decides why and how. Processor executes."},
+      {deck:"data", topic:"Data States", objective:"3.3", difficulty:"Easy", trap:false, q:"What are the three data states?", a:"Data at rest, data in transit or in motion, and data in use."},
+      {deck:"data", topic:"Data States", objective:"1.4", difficulty:"Medium", trap:false, q:"Name three technologies that protect data in transit between a branch office and headquarters.", a:"TLS, VPN, and IPSec. They encrypt or tunnel data across untrusted networks."},
+      {deck:"data", topic:"Data States", objective:"1.4", difficulty:"Hard", trap:true, q:"A database encrypts only SSN and date-of-birth columns, leaving other fields unencrypted. Which encryption type is this?", a:"Record encryption or column-level database encryption. It protects selected fields in stored data, not the full disk or whole file.", trapNote:"Do not call this full disk encryption when only fields are protected."},
+      {deck:"data", topic:"Data Types", objective:"3.3", difficulty:"Medium", trap:false, q:"What is the difference between PII and PHI?", a:"PII identifies a person, such as name, SSN, or address. PHI is health information tied to an identifiable person and protected under HIPAA."},
+      {deck:"data", topic:"Data Sovereignty", objective:"3.3", difficulty:"Medium", trap:false, q:"A cloud provider replicates data in the US, Germany, and Singapore. Which concept requires knowing which country's laws govern each copy?", a:"Data sovereignty. Data is subject to the laws of the country where it physically resides."},
+      {deck:"data", topic:"Data Sovereignty", objective:"3.3", difficulty:"Hard", trap:true, q:"A country requires citizen data collected by foreign companies to stay on servers inside its borders. What concept is this?", a:"Data sovereignty. The law requires data to remain physically within national borders.", trapNote:"Sovereignty is about physical data location, not just who accesses it."},
+      {deck:"data", topic:"Data Security Methods", objective:"3.3", difficulty:"Hard", trap:true, q:"A payment system replaces a credit card number with a random string and stores the original in a secure vault. Is this encryption or tokenization?", a:"Tokenization. The token has no mathematical relationship to the original data and requires a separate vault lookup.", trapNote:"Encryption is reversible with a key. Tokenization uses a mapped token and vault."},
+      {deck:"data", topic:"Data Security Methods", objective:"3.3", difficulty:"Medium", trap:false, q:"A developer needs realistic-looking customer data for testing without exposing actual SSNs. Which method is most appropriate?", a:"Masking. It replaces real data with placeholders while preserving the format for safe testing."},
+      {deck:"data", topic:"Data Security Methods", objective:"3.3", difficulty:"Medium", trap:false, q:"A company divides HR, Finance, and Sales into isolated network zones to limit breach spread. Which method is this?", a:"Segmentation. It isolates zones and reduces lateral movement after a compromise."},
+      {deck:"data", topic:"DLP", objective:"4.4", difficulty:"Medium", trap:false, q:"An employee tries to copy a file containing SSNs to a USB drive on their laptop. Which DLP type detects and blocks this at the workstation?", a:"Endpoint DLP. It runs on user devices and monitors data in use or local transfer attempts."},
+      {deck:"data", topic:"DLP", objective:"4.4", difficulty:"Hard", trap:true, q:"An alert fires when an employee emails credit card numbers, but the alert came from a network gateway device. Which DLP type triggered?", a:"Network DLP. It monitors data in transit leaving the network perimeter.", trapNote:"Endpoint DLP catches it on the laptop. Network DLP catches it at the gateway."}
     ];
 
     const deckNames = {
       all: "All Security+ cards",
       fundamentals: "Section 2: Fundamentals",
-      threats: "Section 3: Threat Actors"
+      threats: "Section 3: Threat Actors",
+      physical: "Section 4: Physical Security",
+      social: "Section 5: Social Engineering",
+      malware: "Section 6: Malware",
+      data: "Section 7: Data Protection"
+    };
+
+    const deckShortNames = {
+      fundamentals: "Section 2",
+      threats: "Section 3",
+      physical: "Section 4",
+      social: "Section 5",
+      malware: "Section 6",
+      data: "Section 7"
+    };
+
+    const abbreviationMeanings = {
+      AAA: "Authentication, Authorization, and Accounting",
+      ACV: "Access Control Vestibule",
+      APT: "Advanced Persistent Threat",
+      AV: "Antivirus",
+      BEC: "Business Email Compromise",
+      BYOD: "Bring Your Own Device",
+      C2: "Command and Control",
+      CER: "Crossover Error Rate",
+      CFO: "Chief Financial Officer",
+      CIA: "Confidentiality, Integrity, and Availability",
+      CIO: "Chief Information Officer",
+      CISO: "Chief Information Security Officer",
+      CPU: "Central Processing Unit",
+      DDoS: "Distributed Denial of Service",
+      DLP: "Data Loss Prevention",
+      DMARC: "Domain-based Message Authentication, Reporting, and Conformance",
+      DKIM: "DomainKeys Identified Mail",
+      EMI: "Electromagnetic Interference",
+      FAR: "False Acceptance Rate",
+      FDE: "Full Disk Encryption",
+      FRR: "False Rejection Rate",
+      GDPR: "General Data Protection Regulation",
+      HIPAA: "Health Insurance Portability and Accountability Act",
+      HR: "Human Resources",
+      IDS: "Intrusion Detection System",
+      IP: "Internet Protocol",
+      IPSec: "Internet Protocol Security",
+      IT: "Information Technology",
+      L2CAP: "Logical Link Control and Adaptation Protocol",
+      MFA: "Multi-Factor Authentication",
+      MSP: "Managed Service Provider",
+      NFC: "Near-Field Communication",
+      NIST: "National Institute of Standards and Technology",
+      OBJ: "Objective",
+      OS: "Operating System",
+      PCI: "Payment Card Industry",
+      PDF: "Portable Document Format",
+      PEP: "Policy Enforcement Point",
+      PHI: "Protected Health Information",
+      PII: "Personally Identifiable Information",
+      PIN: "Personal Identification Number",
+      POAM: "Plan of Action and Milestones",
+      PTZ: "Pan-Tilt-Zoom",
+      RAM: "Random Access Memory",
+      RAT: "Remote Access Trojan",
+      RFID: "Radio-Frequency Identification",
+      RPO: "Recovery Point Objective",
+      RTO: "Recovery Time Objective",
+      SaaS: "Software as a Service",
+      SIEM: "Security Information and Event Management",
+      SMS: "Short Message Service",
+      SPF: "Sender Policy Framework",
+      SQL: "Structured Query Language",
+      SSL: "Secure Sockets Layer",
+      SSN: "Social Security Number",
+      TLS: "Transport Layer Security",
+      USB: "Universal Serial Bus",
+      VLAN: "Virtual Local Area Network",
+      VPN: "Virtual Private Network"
     };
 
     let filtered = [];
@@ -809,10 +1245,19 @@
       return ["all", ...Array.from(new Set(base.map(card => card.topic))).sort()];
     }
 
+    function sectionLabelForTopic(topic, deck) {
+      if (topic === "all") return "All topics";
+      const matchingDecks = Array.from(new Set(cards
+        .filter(card => card.topic === topic && (deck === "all" || card.deck === deck))
+        .map(card => card.deck)));
+      const section = deckShortNames[matchingDecks[0]] || "Section";
+      return `${section} - ${topic}`;
+    }
+
     function syncTopics() {
       const current = el.topicSelect.value || "all";
       el.topicSelect.innerHTML = topicsForDeck(el.deckSelect.value)
-        .map(topic => `<option value="${topic}">${topic === "all" ? "All topics" : topic}</option>`)
+        .map(topic => `<option value="${escHtml(topic)}">${escHtml(sectionLabelForTopic(topic, el.deckSelect.value))}</option>`)
         .join("");
       el.topicSelect.value = topicsForDeck(el.deckSelect.value).includes(current) ? current : "all";
     }
@@ -827,7 +1272,7 @@
         const matchesTopic = topic === "all" || card.topic === topic;
         const matchesGuide = !activeGuideTopics || activeGuideTopics.includes(card.topic);
         const matchesAgain = !reviewAgainMode || review[id] === "again";
-        const matchesTerm = !term || `${card.q} ${card.a} ${card.topic}`.toLowerCase().includes(term);
+        const matchesTerm = !term || `${card.q} ${card.a} ${card.topic} ${sectionLabelForTopic(card.topic, card.deck)} ${expandAbbreviations(card.q)} ${expandAbbreviations(card.a)}`.toLowerCase().includes(term);
         const matchesTrap = !el.trapOnly.checked || card.trap;
         const matchesMastered = !el.hideMastered.checked || review[id] !== "mastered";
         return matchesDeck && matchesTopic && matchesGuide && matchesAgain && matchesTerm && matchesTrap && matchesMastered;
@@ -914,8 +1359,21 @@
         .replace(/"/g, "&quot;");
     }
 
+    function expandAbbreviations(text) {
+      let expanded = String(text)
+        .replace(/\bPOA&M\b(?!\s*\()/g, "POA&M (Plan of Action and Milestones)")
+        .replace(/\bPINs\b(?!\s*\()/g, "PINs (Personal Identification Numbers)")
+        .replace(/\bSSNs\b(?!\s*\()/g, "SSNs (Social Security Numbers)")
+        .replace(/\bVPNs\b(?!\s*\()/g, "VPNs (Virtual Private Networks)");
+      Object.entries(abbreviationMeanings).forEach(([abbr, meaning]) => {
+        const pattern = new RegExp(`\\b${abbr}\\b(?!\\s*\\()`, "g");
+        expanded = expanded.replace(pattern, `${abbr} (${meaning})`);
+      });
+      return expanded;
+    }
+
     function formatAnswer(text) {
-      const clean = String(text).trim();
+      const clean = expandAbbreviations(text).trim();
       const split = clean.match(/^(.{2,90}?)(?:\.\s+|\s+[—-]\s+)(.+)$/);
       if (!split) {
         return `<span class="answer-headline">${escHtml(clean)}</span>`;
@@ -927,7 +1385,7 @@
     }
 
     function plainAnswerHead(text) {
-      const clean = String(text).trim();
+      const clean = expandAbbreviations(text).trim();
       const split = clean.match(/^(.{2,90}?)(?:\.\s+|\s+[—-]\s+)(.+)$/);
       return split ? split[1] : clean;
     }
@@ -958,14 +1416,14 @@
         <article class="flashcard" tabindex="0" aria-label="Quiz question">
           <section class="face front">
             <div class="tags">
-              <span class="tag">${card.topic}</span>
-              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag">${escHtml(sectionLabelForTopic(card.topic, card.deck))}</span>
+              <span class="tag obj">Objective ${card.objective}</span>
               <span class="tag diff">${card.difficulty}</span>
               ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
               ${rating ? `<span class="tag">${rating}</span>` : ""}
               <span class="tag">Quiz ${quizCorrect}/${quizTotal}</span>
             </div>
-            <p class="prompt">${escHtml(card.q)}</p>
+            <p class="prompt">${escHtml(expandAbbreviations(card.q))}</p>
             <div class="quiz-options">
               ${quizOptions.map((option, optionIndex) => `
                 <button class="quiz-option ${quizAnswered && option.correct ? "correct" : ""}" type="button" data-option="${optionIndex}" ${quizAnswered ? "disabled" : ""}>${escHtml(option.answer)}</button>
@@ -987,7 +1445,7 @@
       el.streakCount.textContent = `${studyStats.streak || 0}d`;
 
       el.activeTitle.textContent = quizMode ? "Quiz Mode" : (reviewAgainMode ? "Review Again cards" : deckNames[el.deckSelect.value]);
-      el.activeSubtitle.textContent = filtered.length ? `${filtered[index].topic} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
+      el.activeSubtitle.textContent = filtered.length ? `${sectionLabelForTopic(filtered[index].topic, filtered[index].deck)} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
       el.positionText.textContent = filtered.length ? `${index + 1} / ${filtered.length}` : "0 / 0";
       el.progressBar.style.width = filtered.length ? `${((index + 1) / filtered.length) * 100}%` : "0%";
 
@@ -1016,23 +1474,23 @@
         <article class="flashcard ${flipped ? "flipped" : ""}" tabindex="0" aria-label="Flashcard">
           <section class="face front">
             <div class="tags">
-              <span class="tag">${card.topic}</span>
-              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag">${escHtml(sectionLabelForTopic(card.topic, card.deck))}</span>
+              <span class="tag obj">Objective ${card.objective}</span>
               <span class="tag diff">${card.difficulty}</span>
               ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
               ${rating ? `<span class="tag">${rating}</span>` : ""}
             </div>
-            <p class="prompt">${escHtml(card.q)}</p>
+            <p class="prompt">${escHtml(expandAbbreviations(card.q))}</p>
             <p class="hint">Click Flip Card or press Space to reveal the answer.</p>
           </section>
           <section class="face back">
             <div class="tags">
-              <span class="tag">${card.topic}</span>
-              <span class="tag obj">OBJ ${card.objective}</span>
+              <span class="tag">${escHtml(sectionLabelForTopic(card.topic, card.deck))}</span>
+              <span class="tag obj">Objective ${card.objective}</span>
               <span class="tag diff">${card.difficulty}</span>
               ${card.trap ? `<span class="tag trap">Trap</span>` : ""}
             </div>
-            <div class="answer">${formatAnswer(card.a)}${card.trapNote ? `<div class="trap-note">${escHtml(card.trapNote)}</div>` : ""}</div>
+            <div class="answer">${formatAnswer(card.a)}${card.trapNote ? `<div class="trap-note">${escHtml(expandAbbreviations(card.trapNote))}</div>` : ""}</div>
             <p class="hint">Rate the card, then continue.</p>
           </section>
         </article>
@@ -1148,3 +1606,4 @@
   </script>
 </body>
 </html>
+
