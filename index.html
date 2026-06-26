@@ -460,6 +460,44 @@
       margin-top: 10px;
     }
 
+    .audio-player {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid rgba(59, 130, 246, 0.32);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.58);
+    }
+
+    .audio-player-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .audio-player-head strong {
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    .audio-controls {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 8px;
+    }
+
+    .audio-status {
+      min-height: 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
     .quiz-options {
       display: grid;
       gap: 10px;
@@ -537,7 +575,7 @@
         position: static;
       }
 
-      .study-top, .controls, .rate-row {
+      .study-top, .controls, .rate-row, .audio-controls {
         grid-template-columns: 1fr;
       }
 
@@ -763,6 +801,29 @@
         font-size: 0.9rem;
       }
 
+      .audio-player {
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      .audio-player-head {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .audio-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #audioStartPauseBtn {
+        grid-column: 1 / -1;
+      }
+
+      .audio-status {
+        font-size: 0.86rem;
+      }
+
       .quiz-options {
         gap: 8px;
       }
@@ -898,6 +959,20 @@
           <button id="goodBtn" class="warning">Good</button>
           <button id="masteredBtn" class="success">Mastered</button>
         </div>
+
+        <section class="audio-player" aria-label="Audio review player">
+          <div class="audio-player-head">
+            <strong>Audio Review</strong>
+            <span id="audioProgress">All sections - ready</span>
+          </div>
+          <div class="audio-controls">
+            <button id="audioStartPauseBtn" class="primary">Start All Cards</button>
+            <button id="audioRepeatBtn">Repeat</button>
+            <button id="audioNextBtn">Next</button>
+            <button id="audioStopBtn" class="danger">Stop</button>
+          </div>
+          <div id="audioStatus" class="audio-status">Reads each question, pauses, reads the answer, then advances through Sections 2-7.</div>
+        </section>
 
         <section class="topic-guide">
           <h3>Quick Topic Review</h3>
@@ -1166,6 +1241,11 @@
     let quizCorrect = 0;
     let quizTotal = 0;
     let quizOptions = [];
+    let audioActive = false;
+    let audioPaused = false;
+    let audioTimer = null;
+    let audioCardPosition = 0;
+    let audioRunId = 0;
 
     const el = {
       totalCards: document.getElementById("totalCards"),
@@ -1195,7 +1275,13 @@
       randomBtn: document.getElementById("randomBtn"),
       againBtn: document.getElementById("againBtn"),
       goodBtn: document.getElementById("goodBtn"),
-      masteredBtn: document.getElementById("masteredBtn")
+      masteredBtn: document.getElementById("masteredBtn"),
+      audioStartPauseBtn: document.getElementById("audioStartPauseBtn"),
+      audioRepeatBtn: document.getElementById("audioRepeatBtn"),
+      audioNextBtn: document.getElementById("audioNextBtn"),
+      audioStopBtn: document.getElementById("audioStopBtn"),
+      audioProgress: document.getElementById("audioProgress"),
+      audioStatus: document.getElementById("audioStatus")
     };
 
     function cardId(card) {
@@ -1372,6 +1458,180 @@
       return expanded;
     }
 
+    function speechSupported() {
+      return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+    }
+
+    function stopSpeech() {
+      if (audioTimer) {
+        clearTimeout(audioTimer);
+        audioTimer = null;
+      }
+      if (speechSupported()) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function wait(ms, runId) {
+      return new Promise(resolve => {
+        audioTimer = setTimeout(() => {
+          audioTimer = null;
+          resolve(audioActive && audioRunId === runId && !audioPaused);
+        }, ms);
+      });
+    }
+
+    function speak(text, runId) {
+      return new Promise(resolve => {
+        if (!speechSupported() || !audioActive || audioRunId !== runId || audioPaused) {
+          resolve(false);
+          return;
+        }
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.92;
+        utterance.pitch = 1;
+        utterance.onend = () => resolve(audioActive && audioRunId === runId && !audioPaused);
+        utterance.onerror = () => resolve(false);
+        window.speechSynthesis.speak(utterance);
+      });
+    }
+
+    function audioQuestionText(card) {
+      return `Card ${audioCardPosition + 1} of ${cards.length}. ${sectionLabelForTopic(card.topic, card.deck)}. Question. ${expandAbbreviations(card.q)}`;
+    }
+
+    function audioAnswerText(card) {
+      return `Answer. ${expandAbbreviations(card.a)}${card.trapNote ? ` Trap note. ${expandAbbreviations(card.trapNote)}` : ""}`;
+    }
+
+    function updateAudioUi() {
+      if (!el.audioStartPauseBtn) return;
+      const supported = speechSupported();
+      el.audioStartPauseBtn.disabled = !supported;
+      el.audioRepeatBtn.disabled = !supported || !audioActive;
+      el.audioNextBtn.disabled = !supported || !audioActive;
+      el.audioStopBtn.disabled = !supported || !audioActive;
+      el.audioStartPauseBtn.textContent = audioActive
+        ? (audioPaused ? "Resume Audio" : "Pause Audio")
+        : "Start All Cards";
+      el.audioProgress.textContent = audioActive
+        ? `All sections - card ${audioCardPosition + 1} / ${cards.length}`
+        : "All sections - ready";
+      if (!supported) {
+        el.audioStatus.textContent = "Audio Review needs browser text-to-speech support. Try Safari or Chrome on your iPhone.";
+      } else if (!audioActive) {
+        el.audioStatus.textContent = "Reads each question, pauses, reads the answer, then advances through Sections 2-7.";
+      } else if (audioPaused) {
+        el.audioStatus.textContent = "Paused. Tap Resume Audio to restart the current card.";
+      }
+    }
+
+    async function playAudioCard(runId) {
+      if (!audioActive || audioRunId !== runId || audioPaused) return;
+      const card = cards[audioCardPosition];
+      index = audioCardPosition;
+      flipped = false;
+      render();
+      el.audioStatus.textContent = "Reading question...";
+      if (!await speak(audioQuestionText(card), runId)) return;
+      el.audioStatus.textContent = "Think it through...";
+      if (!await wait(8000, runId)) return;
+      flipped = true;
+      render();
+      el.audioStatus.textContent = "Reading answer...";
+      if (!await speak(audioAnswerText(card), runId)) return;
+      recordStudyActivity();
+      el.audioStatus.textContent = "Next card coming up...";
+      if (!await wait(3000, runId)) return;
+      if (audioCardPosition >= cards.length - 1) {
+        audioActive = false;
+        audioPaused = false;
+        audioRunId += 1;
+        stopSpeech();
+        updateAudioUi();
+        el.audioStatus.textContent = "Audio Review complete. You finished all sections.";
+        return;
+      }
+      audioCardPosition += 1;
+      playAudioCard(runId);
+    }
+
+    function prepareAudioReview(startAtBeginning = true) {
+      clearGuideFilter();
+      clearReviewAgainMode();
+      clearQuizMode();
+      el.deckSelect.value = "all";
+      syncTopics();
+      el.topicSelect.value = "all";
+      el.searchInput.value = "";
+      el.trapOnly.checked = false;
+      el.hideMastered.checked = false;
+      if (startAtBeginning) {
+        audioCardPosition = 0;
+        index = 0;
+      }
+      applyFilters();
+    }
+
+    function startAudioReview(startAtBeginning = true) {
+      if (!speechSupported()) {
+        updateAudioUi();
+        return;
+      }
+      stopSpeech();
+      audioActive = true;
+      audioPaused = false;
+      audioRunId += 1;
+      prepareAudioReview(startAtBeginning);
+      updateAudioUi();
+      playAudioCard(audioRunId);
+    }
+
+    function pauseAudioReview() {
+      if (!audioActive) return;
+      audioPaused = true;
+      stopSpeech();
+      updateAudioUi();
+    }
+
+    function stopAudioReview() {
+      audioActive = false;
+      audioPaused = false;
+      audioRunId += 1;
+      stopSpeech();
+      updateAudioUi();
+    }
+
+    function repeatAudioCard() {
+      if (!audioActive) return;
+      stopSpeech();
+      audioPaused = false;
+      audioRunId += 1;
+      updateAudioUi();
+      playAudioCard(audioRunId);
+    }
+
+    function nextAudioCard() {
+      if (!audioActive) return;
+      stopSpeech();
+      audioCardPosition = audioCardPosition >= cards.length - 1 ? 0 : audioCardPosition + 1;
+      audioPaused = false;
+      audioRunId += 1;
+      updateAudioUi();
+      playAudioCard(audioRunId);
+    }
+
+    function toggleAudioReview() {
+      if (!audioActive) {
+        startAudioReview(true);
+      } else if (audioPaused) {
+        startAudioReview(false);
+      } else {
+        pauseAudioReview();
+      }
+    }
+
     function formatAnswer(text) {
       const clean = expandAbbreviations(text).trim();
       const split = clean.match(/^(.{2,90}?)(?:\.\s+|\s+[—-]\s+)(.+)$/);
@@ -1448,6 +1708,7 @@
       el.activeSubtitle.textContent = filtered.length ? `${sectionLabelForTopic(filtered[index].topic, filtered[index].deck)} - Objective ${filtered[index].objective}` : (reviewAgainMode ? "No missed cards waiting. Nice work." : "No cards match the current filters.");
       el.positionText.textContent = filtered.length ? `${index + 1} / ${filtered.length}` : "0 / 0";
       el.progressBar.style.width = filtered.length ? `${((index + 1) / filtered.length) * 100}%` : "0%";
+      updateAudioUi();
 
       const disabled = filtered.length === 0;
       [el.prevBtn, el.flipBtn, el.nextBtn, el.randomBtn, el.againBtn, el.goodBtn, el.masteredBtn].forEach(button => button.disabled = disabled);
@@ -1565,16 +1826,17 @@
       }
     }
 
-    el.deckSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); syncTopics(); applyFilters(); });
-    el.topicSelect.addEventListener("change", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
-    el.searchInput.addEventListener("input", () => { clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
-    el.trapOnly.addEventListener("change", applyFilters);
-    el.hideMastered.addEventListener("change", applyFilters);
-    el.guideButtons.forEach(button => button.addEventListener("click", () => applyGuideFilter(button)));
-    el.reviewAgainBtn.addEventListener("click", applyReviewAgainMode);
-    el.quizModeBtn.addEventListener("click", applyQuizMode);
-    el.shuffleBtn.addEventListener("click", shuffleCards);
+    el.deckSelect.addEventListener("change", () => { stopAudioReview(); clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); syncTopics(); applyFilters(); });
+    el.topicSelect.addEventListener("change", () => { stopAudioReview(); clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
+    el.searchInput.addEventListener("input", () => { stopAudioReview(); clearGuideFilter(); clearReviewAgainMode(); clearQuizMode(); applyFilters(); });
+    el.trapOnly.addEventListener("change", () => { stopAudioReview(); applyFilters(); });
+    el.hideMastered.addEventListener("change", () => { stopAudioReview(); applyFilters(); });
+    el.guideButtons.forEach(button => button.addEventListener("click", () => { stopAudioReview(); applyGuideFilter(button); }));
+    el.reviewAgainBtn.addEventListener("click", () => { stopAudioReview(); applyReviewAgainMode(); });
+    el.quizModeBtn.addEventListener("click", () => { stopAudioReview(); applyQuizMode(); });
+    el.shuffleBtn.addEventListener("click", () => { stopAudioReview(); shuffleCards(); });
     el.resetBtn.addEventListener("click", () => {
+      stopAudioReview();
       review = {};
       studyStats = {};
       localStorage.removeItem("secplusReview");
@@ -1586,19 +1848,23 @@
       clearQuizMode();
       applyFilters();
     });
-    el.prevBtn.addEventListener("click", () => move(-1));
-    el.nextBtn.addEventListener("click", () => move(1));
-    el.flipBtn.addEventListener("click", flip);
-    el.randomBtn.addEventListener("click", randomCard);
-    el.againBtn.addEventListener("click", () => rate("again"));
-    el.goodBtn.addEventListener("click", () => rate("good"));
-    el.masteredBtn.addEventListener("click", () => rate("mastered"));
+    el.prevBtn.addEventListener("click", () => { stopAudioReview(); move(-1); });
+    el.nextBtn.addEventListener("click", () => { stopAudioReview(); move(1); });
+    el.flipBtn.addEventListener("click", () => { stopAudioReview(); flip(); });
+    el.randomBtn.addEventListener("click", () => { stopAudioReview(); randomCard(); });
+    el.againBtn.addEventListener("click", () => { stopAudioReview(); rate("again"); });
+    el.goodBtn.addEventListener("click", () => { stopAudioReview(); rate("good"); });
+    el.masteredBtn.addEventListener("click", () => { stopAudioReview(); rate("mastered"); });
+    el.audioStartPauseBtn.addEventListener("click", toggleAudioReview);
+    el.audioRepeatBtn.addEventListener("click", repeatAudioCard);
+    el.audioNextBtn.addEventListener("click", nextAudioCard);
+    el.audioStopBtn.addEventListener("click", stopAudioReview);
 
     document.addEventListener("keydown", event => {
       if (event.target.matches("input, select")) return;
-      if (event.code === "Space") { event.preventDefault(); flip(); }
-      if (event.key === "ArrowRight") move(1);
-      if (event.key === "ArrowLeft") move(-1);
+      if (event.code === "Space") { event.preventDefault(); stopAudioReview(); flip(); }
+      if (event.key === "ArrowRight") { stopAudioReview(); move(1); }
+      if (event.key === "ArrowLeft") { stopAudioReview(); move(-1); }
     });
 
     syncTopics();
