@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cipher Quest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Security+ Section 8</p>
+        <h1>Cipher Quest</h1>
+      </div>
+      <div class="score-box" aria-label="Game score">
+        <span id="score">0</span>
+        <small>gems</small>
+      </div>
+    </header>
+
+    <section class="world" aria-label="Quest progress">
+      <div class="hero" aria-hidden="true">
+        <div class="avatar">
+          <span class="helmet"></span>
+          <span class="face"></span>
+          <span class="body"></span>
+        </div>
+      </div>
+      <div class="map" id="map"></div>
+    </section>
+
+    <section class="hud">
+      <div class="meter">
+        <div class="meter-label">
+          <span id="zoneName">Key Camp</span>
+          <span id="roundText">1 / 18</span>
+        </div>
+        <div class="bar"><span id="progressBar"></span></div>
+      </div>
+      <div class="stats">
+        <span>Streak <strong id="streak">0</strong></span>
+        <span>Best <strong id="best">0</strong></span>
+      </div>
+    </section>
+
+    <section class="card" aria-live="polite">
+      <div class="card-head">
+        <span class="mode" id="modeLabel">Meaning</span>
+        <span class="term" id="termLabel">AES</span>
+      </div>
+      <h2 id="prompt">Loading...</h2>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback" hidden></div>
+      <div class="actions">
+        <button id="nextBtn" class="primary" disabled>Next Block</button>
+        <button id="retryMissedBtn" hidden>Retry Missed</button>
+        <button id="restartBtn">Restart</button>
+      </div>
+    </section>
+
+    <section class="glossary" aria-label="Section 8 vocabulary checklist">
+      <div class="glossary-head">
+        <h2>Section 8 Vocab</h2>
+        <span id="glossaryCount">0 terms</span>
+      </div>
+      <div class="glossary-list" id="glossaryList"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

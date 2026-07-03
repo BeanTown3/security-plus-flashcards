@@ -905,7 +905,7 @@
     <header>
       <div>
         <h1>CompTIA Security+ Study Deck</h1>
-        <p class="subtitle">Flashcards and quick review notes generated from your Notion pages: Sections 2-7 for Security+ review.</p>
+        <p class="subtitle">Flashcards and quick review notes generated from your Notion pages: Sections 2-8 for Security+ review.</p>
       </div>
       <div class="source">Source: Notion Security+ notes</div>
     </header>
@@ -931,6 +931,7 @@
             <option value="social">Section 5: Social Engineering</option>
             <option value="malware">Section 6: Malware</option>
             <option value="data">Section 7: Data Protection</option>
+            <option value="crypto">Section 8: Cryptographic Solutions</option>
           </select>
         </div>
 
@@ -966,6 +967,7 @@
           <button class="mini-topic" type="button" data-guide="social" data-deck="social" data-topics="Triggers,Impersonation,Phishing,Scams,Influence,Physical Social Engineering"><strong>Social engineering</strong><span>Human-focused attacks, phishing flavors, scams, and awareness.</span></button>
           <button class="mini-topic" type="button" data-guide="malware" data-deck="malware" data-topics="Malware Basics,Virus/Worm/Trojan,Ransomware,Botnets,Rootkits,Persistence,Keyloggers,Fileless Malware,Indicators"><strong>Malware</strong><span>Malware types, persistence, and indicators of compromise.</span></button>
           <button class="mini-topic" type="button" data-guide="data" data-deck="data" data-topics="Classification,Ownership,Data States,Data Types,Data Sovereignty,Data Security Methods,DLP"><strong>Data protection</strong><span>Classification, ownership, data states, sovereignty, and DLP.</span></button>
+          <button class="mini-topic" type="button" data-guide="crypto" data-deck="crypto" data-topics="Crypto Basics,Symmetric vs Asymmetric,Symmetric Algorithms,Asymmetric Algorithms,Hashing,PKI and Certificates,Blockchain,Encryption Tools,Obfuscation,Crypto Attacks"><strong>Cryptographic solutions</strong><span>Keys, algorithms, hashes, PKI, certificates, and crypto attacks.</span></button>
         </div>
       </aside>
 
@@ -1007,7 +1009,7 @@
             <button id="audioNextBtn">Next</button>
             <button id="audioStopBtn" class="danger">Stop</button>
           </div>
-          <div id="audioStatus" class="audio-status">Reads each question, pauses, reads the answer, then advances through Sections 2-7.</div>
+          <div id="audioStatus" class="audio-status">Reads each question, pauses, reads the answer, then advances through Sections 2-8.</div>
         </section>
 
         <section class="topic-guide">
@@ -1070,6 +1072,16 @@
               <li>Tokenization replaces data with a vault-backed token; encryption is reversible with a key.</li>
               <li>Data sovereignty follows the physical location of the data.</li>
               <li>DLP location matters: endpoint catches activity on the device; network catches data leaving the perimeter.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Section 8: Cryptographic Solutions</summary>
+            <ul>
+              <li>Strong cryptography depends on secrecy of the key, not secrecy of the algorithm.</li>
+              <li>Symmetric encryption is faster for bulk data; asymmetric encryption solves key distribution and supports digital signatures.</li>
+              <li>Hashing is one-way integrity; encryption is reversible confidentiality with the correct key.</li>
+              <li>PKI manages trust: CA issues, RA verifies, CSR requests, and CRL or OCSP checks revocation.</li>
+              <li>Downgrade, collision, birthday, and quantum attacks are major crypto exam traps.</li>
             </ul>
           </details>
         </section>
@@ -1180,7 +1192,33 @@
       {deck:"data", topic:"Data Security Methods", objective:"3.3", difficulty:"Medium", trap:false, q:"A developer needs realistic-looking customer data for testing without exposing actual SSNs. Which method is most appropriate?", a:"Masking. It replaces real data with placeholders while preserving the format for safe testing."},
       {deck:"data", topic:"Data Security Methods", objective:"3.3", difficulty:"Medium", trap:false, q:"A company divides HR, Finance, and Sales into isolated network zones to limit breach spread. Which method is this?", a:"Segmentation. It isolates zones and reduces lateral movement after a compromise."},
       {deck:"data", topic:"DLP", objective:"4.4", difficulty:"Medium", trap:false, q:"An employee tries to copy a file containing SSNs to a USB drive on their laptop. Which DLP type detects and blocks this at the workstation?", a:"Endpoint DLP. It runs on user devices and monitors data in use or local transfer attempts."},
-      {deck:"data", topic:"DLP", objective:"4.4", difficulty:"Hard", trap:true, q:"An alert fires when an employee emails credit card numbers, but the alert came from a network gateway device. Which DLP type triggered?", a:"Network DLP. It monitors data in transit leaving the network perimeter.", trapNote:"Endpoint DLP catches it on the laptop. Network DLP catches it at the gateway."}
+      {deck:"data", topic:"DLP", objective:"4.4", difficulty:"Hard", trap:true, q:"An alert fires when an employee emails credit card numbers, but the alert came from a network gateway device. Which DLP type triggered?", a:"Network DLP. It monitors data in transit leaving the network perimeter.", trapNote:"Endpoint DLP catches it on the laptop. Network DLP catches it at the gateway."},
+
+      {deck:"crypto", topic:"Crypto Basics", objective:"1.4", difficulty:"Medium", trap:true, q:"A student says an encryption algorithm is secure because nobody knows how it works. What is wrong with that reasoning?", a:"Strong cryptography relies on secrecy of the key, not secrecy of the algorithm. Modern algorithms are public and peer-reviewed.", trapNote:"Security through obscurity is unreliable and is not the exam answer."},
+      {deck:"crypto", topic:"Crypto Basics", objective:"1.4", difficulty:"Easy", trap:false, q:"What is the difference between plaintext and ciphertext?", a:"Plaintext is readable data before encryption. Ciphertext is scrambled unreadable data after encryption."},
+      {deck:"crypto", topic:"Crypto Basics", objective:"1.4", difficulty:"Medium", trap:false, q:"Which encryption level protects an entire drive, and which protects a single row or field in a database?", a:"Full-disk encryption protects the entire drive. Record encryption protects one row, record, or field in a database."},
+      {deck:"crypto", topic:"Symmetric vs Asymmetric", objective:"1.4", difficulty:"Hard", trap:true, q:"A network admin needs to encrypt a 10GB file transfer as fast as possible after a shared secret is established. Should they use symmetric or asymmetric encryption?", a:"Symmetric encryption. It is much faster than asymmetric encryption and is used for bulk data transfer.", trapNote:"Asymmetric is usually used to exchange or protect the key, not to encrypt large bulk data."},
+      {deck:"crypto", topic:"Symmetric vs Asymmetric", objective:"1.4", difficulty:"Hard", trap:true, q:"Which encryption type solves the key distribution problem and can support non-repudiation?", a:"Asymmetric encryption. It uses a public/private key pair, supports digital signatures, and avoids sharing one secret key with everyone.", trapNote:"Symmetric encryption is faster but does not provide non-repudiation by itself."},
+      {deck:"crypto", topic:"Symmetric Algorithms", objective:"1.4", difficulty:"Medium", trap:false, q:"Which symmetric algorithm is the current U.S. government standard and is also known as Rijndael?", a:"AES. Advanced Encryption Standard supports 128, 192, and 256-bit keys and replaced DES and 3DES for modern use."},
+      {deck:"crypto", topic:"Symmetric Algorithms", objective:"1.4", difficulty:"Hard", trap:true, q:"Which symmetric algorithm in this section is the stream cipher, and what are the others mostly considered?", a:"RC4 is the stream cipher. DES, 3DES, IDEA, AES, Blowfish, Twofish, RC5, and RC6 are block ciphers.", trapNote:"The exam likes to hide RC4 in a list of block ciphers."},
+      {deck:"crypto", topic:"Asymmetric Algorithms", objective:"1.4", difficulty:"Medium", trap:false, q:"A VPN tunnel setup needs key exchange only. Which asymmetric algorithm is specifically known for that job?", a:"Diffie-Hellman. It is used for secure key agreement, but it needs authentication to avoid on-path attacks."},
+      {deck:"crypto", topic:"Asymmetric Algorithms", objective:"1.4", difficulty:"Hard", trap:true, q:"A mobile app needs strong asymmetric cryptography with low processing overhead. Which algorithm family fits best?", a:"ECC. Elliptic Curve Cryptography provides strong security with smaller keys, making it efficient for mobile and low-power devices.", trapNote:"Small ECC keys are not weaker; they are more efficient for comparable strength."},
+      {deck:"crypto", topic:"Hashing", objective:"1.4", difficulty:"Hard", trap:true, q:"Can hashing provide confidentiality? Why or why not?", a:"No. Hashing is one-way and provides integrity, not confidentiality. Encryption protects confidentiality because it is reversible with the correct key.", trapNote:"Hashing is not encryption."},
+      {deck:"crypto", topic:"Hashing", objective:"2.4", difficulty:"Hard", trap:true, q:"Two different files produce the same SHA-1 hash. What is this called?", a:"Collision. A collision happens when different inputs produce the same hash output.", trapNote:"A collision is a hash weakness; it is not the same as reversing a hash."},
+      {deck:"crypto", topic:"Hashing", objective:"2.4", difficulty:"Hard", trap:true, q:"An attacker steals a Windows password hash and authenticates with the hash without knowing the password. What attack is this?", a:"Pass-the-hash. The attacker reuses the captured hash directly as an authentication secret.", trapNote:"The attacker does not need to crack the hash into plaintext."},
+      {deck:"crypto", topic:"Hashing", objective:"1.4", difficulty:"Medium", trap:false, q:"What does salting do to password hashes?", a:"Salting adds random data before hashing so identical passwords produce different hashes. It makes rainbow table and precomputed attacks impractical."},
+      {deck:"crypto", topic:"PKI and Certificates", objective:"1.4", difficulty:"Hard", trap:true, q:"What is the difference between PKI and public key cryptography?", a:"Public key cryptography is the asymmetric encryption method. PKI is the larger system of people, policies, hardware, software, keys, and certificates that manages trust.", trapNote:"PKI is the full trust framework, not just the math."},
+      {deck:"crypto", topic:"PKI and Certificates", objective:"1.4", difficulty:"Hard", trap:true, q:"A certificate must cover www.company.com, mail.company.com, and blog.company.com. What certificate type fits best?", a:"Wildcard certificate. It covers multiple subdomains under one root domain, such as *.company.com.", trapNote:"Use SAN when the certificate must cover different root domains."},
+      {deck:"crypto", topic:"PKI and Certificates", objective:"1.4", difficulty:"Hard", trap:true, q:"A company wants one certificate for company.com and companyapp.io. Which certificate feature is needed?", a:"SAN. Subject Alternate Name allows one certificate to cover multiple different domain names.", trapNote:"Wildcard certificates only cover subdomains under the same root domain."},
+      {deck:"crypto", topic:"PKI and Certificates", objective:"1.4", difficulty:"Medium", trap:false, q:"Which revocation check is faster for one certificate: CRL or OCSP?", a:"OCSP. Online Certificate Status Protocol checks the status of one certificate by serial number, while CRL requires checking a full revocation list."},
+      {deck:"crypto", topic:"PKI and Certificates", objective:"1.4", difficulty:"Hard", trap:true, q:"How is a digital signature created?", a:"Hash the message, then encrypt the hash with the sender's private key. The receiver verifies it with the sender's public key.", trapNote:"For secrecy, encrypt with the receiver's public key. For proof of origin, sign with the sender's private key."},
+      {deck:"crypto", topic:"Blockchain", objective:"1.4", difficulty:"Medium", trap:false, q:"Why does blockchain support integrity?", a:"Each block contains the hash of the previous block. Changing one block breaks the chain of hashes, making tampering evident."},
+      {deck:"crypto", topic:"Encryption Tools", objective:"1.4", difficulty:"Medium", trap:true, q:"What is the difference between a TPM and an HSM?", a:"A TPM is a device-level hardware chip for protecting local cryptographic keys. An HSM is an enterprise-grade tamper-resistant device for managing keys and crypto operations at scale.", trapNote:"TPM is endpoint or device scale; HSM is enterprise or data-center scale."},
+      {deck:"crypto", topic:"Encryption Tools", objective:"1.4", difficulty:"Medium", trap:false, q:"What is a secure enclave used for?", a:"A secure enclave is an isolated processor area that protects sensitive data such as biometric keys separately from the main CPU."},
+      {deck:"crypto", topic:"Obfuscation", objective:"1.4", difficulty:"Hard", trap:true, q:"What is the difference between steganography, tokenization, and masking?", a:"Steganography hides that data exists. Tokenization replaces sensitive data with a vault-backed token. Masking disguises data while preserving a usable format.", trapNote:"Steganography is concealment, not encryption by itself."},
+      {deck:"crypto", topic:"Crypto Attacks", objective:"2.4", difficulty:"Hard", trap:true, q:"An attacker forces a browser and server to fall back from TLS to SSL 3.0. What attack is this and what is the famous example?", a:"Downgrade attack. The famous example is POODLE, which forced fallback to weaker SSL 3.0 behavior.", trapNote:"Downgrade attacks exploit legacy protocol negotiation."},
+      {deck:"crypto", topic:"Crypto Attacks", objective:"2.3", difficulty:"Hard", trap:true, q:"Why do quantum computers threaten RSA and ECC more than symmetric encryption?", a:"RSA and ECC rely on hard math problems like factoring and discrete logarithms that quantum algorithms can solve much faster. Symmetric encryption is less directly threatened and can often use larger keys.", trapNote:"The exam usually points quantum risk at asymmetric encryption first."},
+      {deck:"crypto", topic:"Crypto Attacks", objective:"1.4", difficulty:"Hard", trap:true, q:"Which post-quantum algorithm is for encryption or key establishment and which is for signatures?", a:"CRYSTALS-Kyber is for encryption and key establishment. CRYSTALS-Dilithium is for digital signatures.", trapNote:"Kyber encrypts; Dilithium signs."}
     ];
 
     const deckNames = {
@@ -1190,7 +1228,8 @@
       physical: "Section 4: Physical Security",
       social: "Section 5: Social Engineering",
       malware: "Section 6: Malware",
-      data: "Section 7: Data Protection"
+      data: "Section 7: Data Protection",
+      crypto: "Section 8: Cryptographic Solutions"
     };
 
     const deckShortNames = {
@@ -1199,44 +1238,63 @@
       physical: "Section 4",
       social: "Section 5",
       malware: "Section 6",
-      data: "Section 7"
+      data: "Section 7",
+      crypto: "Section 8"
     };
 
     const abbreviationMeanings = {
       AAA: "Authentication, Authorization, and Accounting",
       ACV: "Access Control Vestibule",
+      AES: "Advanced Encryption Standard",
       APT: "Advanced Persistent Threat",
       AV: "Antivirus",
       BEC: "Business Email Compromise",
       BYOD: "Bring Your Own Device",
       C2: "Command and Control",
+      CA: "Certificate Authority",
       CER: "Crossover Error Rate",
       CFO: "Chief Financial Officer",
       CIA: "Confidentiality, Integrity, and Availability",
       CIO: "Chief Information Officer",
       CISO: "Chief Information Security Officer",
       CPU: "Central Processing Unit",
+      CRL: "Certificate Revocation List",
+      CSR: "Certificate Signing Request",
       DDoS: "Distributed Denial of Service",
+      DES: "Data Encryption Standard",
       DLP: "Data Loss Prevention",
       DMARC: "Domain-based Message Authentication, Reporting, and Conformance",
       DKIM: "DomainKeys Identified Mail",
+      DSA: "Digital Signature Algorithm",
+      DSS: "Digital Signature Standard",
+      ECC: "Elliptic Curve Cryptography",
+      ECDH: "Elliptic Curve Diffie-Hellman",
+      ECDHE: "Elliptic Curve Diffie-Hellman Ephemeral",
+      ECDSA: "Elliptic Curve Digital Signature Algorithm",
       EMI: "Electromagnetic Interference",
       FAR: "False Acceptance Rate",
       FDE: "Full Disk Encryption",
       FRR: "False Rejection Rate",
       GDPR: "General Data Protection Regulation",
+      GPG: "GNU Privacy Guard",
       HIPAA: "Health Insurance Portability and Accountability Act",
+      HMAC: "Hash-based Message Authentication Code",
       HR: "Human Resources",
+      HSM: "Hardware Security Module",
       IDS: "Intrusion Detection System",
+      IDEA: "International Data Encryption Algorithm",
       IP: "Internet Protocol",
       IPSec: "Internet Protocol Security",
       IT: "Information Technology",
+      KMS: "Key Management System",
       L2CAP: "Logical Link Control and Adaptation Protocol",
+      MD5: "Message Digest Algorithm 5",
       MFA: "Multi-Factor Authentication",
       MSP: "Managed Service Provider",
       NFC: "Near-Field Communication",
       NIST: "National Institute of Standards and Technology",
       OBJ: "Objective",
+      OCSP: "Online Certificate Status Protocol",
       OS: "Operating System",
       PCI: "Payment Card Industry",
       PDF: "Portable Document Format",
@@ -1244,14 +1302,25 @@
       PHI: "Protected Health Information",
       PII: "Personally Identifiable Information",
       PIN: "Personal Identification Number",
+      PGP: "Pretty Good Privacy",
+      PKI: "Public Key Infrastructure",
       POAM: "Plan of Action and Milestones",
+      POODLE: "Padding Oracle On Downgraded Legacy Encryption",
       PTZ: "Pan-Tilt-Zoom",
+      RA: "Registration Authority",
       RAM: "Random Access Memory",
       RAT: "Remote Access Trojan",
+      RC4: "Rivest Cipher 4",
+      RC5: "Rivest Cipher 5",
+      RC6: "Rivest Cipher 6",
       RFID: "Radio-Frequency Identification",
+      RIPEMD: "Race Integrity Primitives Evaluation Message Digest",
       RPO: "Recovery Point Objective",
+      RSA: "Rivest-Shamir-Adleman",
       RTO: "Recovery Time Objective",
+      SAN: "Subject Alternate Name",
       SaaS: "Software as a Service",
+      SHA: "Secure Hash Algorithm",
       SIEM: "Security Information and Event Management",
       SMS: "Short Message Service",
       SPF: "Sender Policy Framework",
@@ -1259,9 +1328,13 @@
       SSL: "Secure Sockets Layer",
       SSN: "Social Security Number",
       TLS: "Transport Layer Security",
+      TPM: "Trusted Platform Module",
       USB: "Universal Serial Bus",
       VLAN: "Virtual Local Area Network",
-      VPN: "Virtual Private Network"
+      VPN: "Virtual Private Network",
+      WEP: "Wired Equivalent Privacy",
+      WPA: "Wi-Fi Protected Access",
+      XOR: "Exclusive OR"
     };
 
     let filtered = [];
@@ -1557,7 +1630,7 @@
       if (!supported) {
         el.audioStatus.textContent = "Audio Review needs browser text-to-speech support. Try Safari or Chrome on your iPhone.";
       } else if (!audioActive) {
-        el.audioStatus.textContent = "Reads each question, pauses, reads the answer, then advances through Sections 2-7.";
+        el.audioStatus.textContent = "Reads each question, pauses, reads the answer, then advances through Sections 2-8.";
       } else if (audioPaused) {
         el.audioStatus.textContent = "Paused. Tap Resume Audio to restart the current card.";
       }

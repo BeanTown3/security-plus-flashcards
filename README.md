@@ -1,10 +1,14 @@
 # Security+ Flashcards
 
-An interactive CompTIA Security+ study deck built from personal study notes in Notion. The project turns exam notes into searchable flashcards with deck filters, trap-card review, missed-card practice, quiz mode, progress tracking, and a polished dark dashboard interface.
+An interactive CompTIA Security+ study deck built from personal study notes in Notion. The project turns exam notes into searchable flashcards with deck filters, trap-card review, missed-card practice, quiz mode, audio review, progress tracking, and a polished dark dashboard interface.
+
+The repo also includes **Cipher Quest**, a dark mobile-friendly cryptography learning game for Security+ Section 8.
 
 ## Live Demo
 
 [Open the live Security+ flashcard app](https://beantown3.github.io/security-plus-flashcards/)
+
+[Open Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/)
 
 ## Screenshots
 
@@ -30,8 +34,8 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 
 ## Features
 
-- 46 flashcards based on CompTIA Security+ notes
-- Deck filters for Section 2: Fundamentals of Security and Section 3: Threat Actors
+- 123 flashcards based on CompTIA Security+ notes
+- Deck filters for Sections 2-8
 - Clickable topic shortcuts for high-level review areas
 - Topic and keyword search
 - Trap-card mode for high-mistake exam scenarios
@@ -40,9 +44,16 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - Again / Good / Mastered ratings
 - Dedicated Review Again mode for missed cards
 - Multiple-choice quiz mode with score tracking
+- Audio review mode for hands-free study
 - Daily reviewed-card count and study streak tracking
 - Browser local storage for review progress
 - Offline-friendly single-page HTML app
+
+## Cipher Quest
+
+Cipher Quest is a separate Section 8 game focused on cryptographic vocabulary, meaning, and exam use cases. It uses short scenario questions, shuffled answer choices, missed-question retry, and concise **Clue / Use / Why / Trap** explanations to train exam decision-making.
+
+[Play Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/)
 
 ## Topics Covered
 
@@ -60,6 +71,9 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 - Bluetooth and wired-network attack vectors
 - Honeypots, honeynets, honeyfiles, and honeytokens
 - Social engineering concepts such as BEC, smishing, watering hole attacks, and typosquatting
+- Malware concepts such as ransomware, botnets, rootkits, fileless malware, and compromise indicators
+- Data protection concepts such as classification, ownership, data states, sovereignty, tokenization, masking, and DLP
+- Cryptographic solutions such as symmetric encryption, asymmetric encryption, hashing, PKI, certificates, TPM, HSM, and downgrade attacks
 
 ## Built With
 
@@ -100,6 +114,7 @@ I documented an evidence-driven, AI-assisted investigation into a Windows sandbo
 ## Future Improvements
 
 - Add more Security+ chapters from Notion
+- Expand Cipher Quest with more playable rounds for every Section 8 vocabulary term
 - Move flashcard data into a separate `cards.json` file
 - Split the project into separate `style.css` and `app.js` files
 - Add import/export for progress
