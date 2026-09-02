@@ -8,7 +8,7 @@ The repo also includes **Cipher Quest**, a dark mobile-friendly cryptography lea
 
 [Open the live Security+ flashcard app](https://beantown3.github.io/security-plus-flashcards/)
 
-[Open Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/)
+[Open Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/?version=bc44062)
 
 ## Screenshots
 
@@ -51,9 +51,26 @@ I am studying cybersecurity and wanted a project that helps me learn while also 
 
 ## Cipher Quest
 
-Cipher Quest is a separate Section 8 game focused on cryptographic vocabulary, meaning, and exam use cases. It uses short scenario questions, shuffled answer choices, missed-question retry, and concise **Clue / Use / Why / Trap** explanations to train exam decision-making.
+Cipher Quest is a responsive cryptography learning game focused on Security+ Section 8. I redesigned the original prototype into a calmer, adaptive study experience that breaks dense material into short rounds and provides immediate reinforcement after every answer.
 
-[Play Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/)
+[Play Cipher Quest](https://beantown3.github.io/security-plus-flashcards/cipher-quest/?version=bc44062)
+
+[Read the Cipher Quest project details](cipher-quest/README.md)
+
+### Cipher Quest Highlights
+
+- 35-question Practice mode
+- Eight-question Five-Minute Review
+- Ten-question comparison round for commonly confused concepts
+- Six difficult, original Security+-style Boss Mode scenarios
+- Green correct blocks, red review blocks, and a yellow current block
+- Clickable completed blocks for reviewing previous questions
+- Full definitions, reasoning, comparisons, and memory hooks after each answer
+- Full terminology paired with abbreviations, such as Hardware Security Module (HSM)
+- 68 vocabulary terms organized into eight smaller learning zones
+- Missed-question retry and browser-based session restoration
+- Responsive layouts tested for desktop, large iPad Pro, and iPhone screens
+- Dark, minimalist interface with a custom pixel-style character
 
 ## Topics Covered
 
@@ -84,6 +101,21 @@ Cipher Quest is a separate Section 8 game focused on cryptographic vocabulary, m
 - GitHub Pages for hosting
 - AI-assisted development with Codex
 
+## AI-Assisted Development Approach
+
+I used Codex as a coding and testing partner while I acted as the product owner and subject-matter learner. I supplied the study notes, identified usability problems through hands-on testing, defined the learning behavior, reviewed each iteration, and requested corrections when the interface did not reinforce the material clearly enough.
+
+The development workflow included:
+
+- Translating learner feedback into specific interface requirements
+- Auditing dense study notes and prioritizing essential concepts
+- Designing active-recall, comparison, review, and scenario modes
+- Testing correct, incorrect, retry, and saved-session behavior
+- Checking responsive layouts at desktop, tablet, and phone sizes
+- Using Git commits to preserve the evolution from prototype to redesign
+
+This is intentionally described as **AI-assisted development** rather than claiming the code was written without assistance.
+
 ## How To Use
 
 Open the [live demo](https://beantown3.github.io/security-plus-flashcards/) or open `index.html` locally in a browser. No build tools or server are required.
@@ -97,6 +129,8 @@ Use the deck dropdown to choose a section, click a topic shortcut, search for a 
 - How browser `localStorage` can save progress without a backend
 - How GitHub Pages can publish a static website
 - How AI can help build a project while I continue learning the code and concepts
+- How to evaluate an early prototype, report specific usability failures, and turn them into testable acceptance criteria
+- Why certification practice should progress from recognition to comparison and unfamiliar scenario application
 
 ## Troubleshooting Case Study
 
@@ -114,7 +148,9 @@ I documented an evidence-driven, AI-assisted investigation into a Windows sandbo
 ## Future Improvements
 
 - Add more Security+ chapters from Notion
-- Expand Cipher Quest with more playable rounds for every Section 8 vocabulary term
+- Add additional reworded question variants for spaced review
+- Add progress summaries by cryptography learning zone
+- Expand Boss Mode with more performance-based question-style activities
 - Move flashcard data into a separate `cards.json` file
 - Split the project into separate `style.css` and `app.js` files
 - Add import/export for progress
